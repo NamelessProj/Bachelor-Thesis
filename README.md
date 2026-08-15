@@ -1,4 +1,4 @@
-# Bachelor Thesis — NamelessStory
+# Bachelor Thesis | NamelessStory
 
 LaTeX source for my Bachelor of Science (Web) thesis, submitted to [SAE Institute Genève](https://www.sae.edu/) in July 2026.
 
@@ -11,7 +11,7 @@ The thesis documents the design, implementation, and evaluation of **[NamelessSt
 | Language | Branch | Status |
 |---|---|---|
 | 🇫🇷 French | [`main`](../../tree/main) | Original, as submitted to SAE Genève |
-| 🇬🇧 English | [`english-version`](../../tree/english-version) | Translation for portfolio/job applications — not a formal academic submission |
+| 🇬🇧 English | [`english-version`](../../tree/english-version) | Translation for personal usage, not a formal academic submission |
 
 Compiled PDFs for both versions are attached to the [Releases](../../releases) page.
 
