@@ -1,46 +1,46 @@
 \section{Conclusion}
 \label{chap:conclusion}
 
-\subsection{Synthèse}
-Ce mémoire a présenté la conception, l’implémentation et l’évaluation de \nsit, un moteur de \acrlong{vn} web fondé sur un format de script déclaratif en \gls{json}. L’idée de départ était simple: vérifier si une architecture de ce type pouvait réellement permettre à des auteurs non-développeurs de créer et de publier des récits interactifs sans passer par une installation locale ou une phase de compilation.
+\subsection{Summary}
+This thesis presented the design, implementation, and evaluation of \nsit, a web \acrlong{vn} engine based on a declarative \gls{json} script format. The starting idea was simple: to check whether an architecture of this kind could genuinely allow non-developer authors to create and publish interactive stories without going through a local installation or a compilation step.
 
-Au fil du travail, j’ai défini un \gls{schema} de script, construit un \glsit{runtime} web en \gls{ts}/\gls{reactjs}, optimisé les composants les plus coûteux, notamment \texttt{Typewriter}, puis ajouté une validation d’exécution via \gls{zod}. Trois itérations successives, centrées sur les bases, l’optimisation et la robustesse, ont permis d’atteindre les objectifs classés \textit{Must} et \textit{Should}: affichage progressif du texte, navigation entre scènes, gestion des choix, validation du format et gestion basique des saisies. Certaines fonctions \textit{Can}, comme les \glsplit{sprite}, les transitions ou la sauvegarde déléguée à un \gls{webworker}, ont également été amorcées.
-
-
-\subsection{Réponse à la problématique et bilan critique}
-La question de recherche portait sur la capacité d’une architecture de moteur de \gls{vn} web, fondée sur un format déclaratif, à permettre à des auteurs non-développeurs de créer du contenu interactif. Sur le plan technique, la réponse est positive: j’ai montré qu’il était possible de décrire un récit interactif dans un fichier déclaratif et de l’exécuter directement dans un navigateur, avec des mécanismes de validation et des messages d’erreur exploitables.
-
-En revanche, l’évaluation met aussi en évidence une limite plus nette du point de vue de l’auteur. Le format \gls{json}, même s’il est adapté au moteur, reste sensible aux erreurs de syntaxe et peu confortable pour une personne qui ne vient pas du développement. Sans éditeur guidé, validation en temps réel ou modèles prêts à l’emploi, l’approche déclarative seule ne suffit pas à rendre la création totalement autonome. Par ailleurs, certains choix techniques, comme la précomputation des \glslink{snaphtml}{snapshots} ou la délégation de traitements à un \gls{webworker}, améliorent le comportement du moteur, mais introduisent aussi des compromis qu’il faut accepter selon le contexte d’usage.
-
-En résumé, l’architecture est viable et propre sur le plan technique, mais elle doit encore être entourée d’outils pensés pour l’écriture afin de répondre pleinement à l’objectif initial.
+Over the course of the work, I defined a script \gls{schema}, built a web \glsit{runtime} in \gls{ts}/\gls{reactjs}, optimised the most expensive components, notably \texttt{Typewriter}, then added runtime validation via \gls{zod}. Three successive iterations, focused on the basics, optimisation, and robustness, made it possible to achieve the objectives classified as \textit{Must} and \textit{Should}: progressive text display, scene navigation, choice handling, format validation, and basic input handling. Some \textit{Can} features, such as \glsplit{sprite}, transitions, or saving delegated to a \gls{webworker}, were also started.
 
 
-\subsection{Pistes de développement}
+\subsection{Answer to the Research Question and Critical Assessment}
+The research question concerned the ability of a web \gls{vn} engine architecture, based on a declarative format, to allow non-developer authors to create interactive content. On the technical level, the answer is positive: I showed that it was possible to describe an interactive narrative in a declarative file and run it directly in a browser, with validation mechanisms and actionable error messages.
 
-\subsubsection{Pistes de développement du Media Project}
-Pour rendre la solution réellement utilisable par des auteurs non-développeurs, plusieurs évolutions me paraissent prioritaires :
+On the other hand, the evaluation also highlights a sharper limitation from the author's point of view. The \gls{json} format, even though suited to the engine, remains sensitive to syntax errors and is not very comfortable for someone who does not come from a development background. Without a guided editor, real-time validation, or ready-to-use templates, the declarative approach alone is not enough to make content creation fully autonomous. In addition, some technical choices, such as precomputing \glslink{snaphtml}{snapshots} or delegating processing to a \gls{webworker}, improve the engine's behaviour, but also introduce trade-offs that need to be accepted depending on the context of use.
+
+In short, the architecture is technically viable and clean, but it still needs to be surrounded by tools designed for writing in order to fully meet the initial objective.
+
+
+\subsection{Directions for Development}
+
+\subsubsection{Media Project Development Directions}
+To make the solution genuinely usable by non-developer authors, several developments seem to me to be priorities:
 
 \begin{itemize}
-    \item Développer un éditeur guidé avec validation en temps réel (prévisualisation, messages d'erreur explicites, modèles), afin de masquer la complexité syntaxique du \gls{json}.
-    \item Ajouter des outils de conversion et d'import (par ex. importer depuis un format plus lisible ou depuis un langage narratif type Ink) pour réduire la courbe d'apprentissage.
-    \item Étendre le moteur avec des embranchements conditionnels, des variables de scénario plus riches et une API d'extensions pour permettre des fonctionnalités avancées sans modifier le cœur du \glsit{runtime}.
-    \item Automatiser la chaîne de publication (intégration continue → déploiement statique) et fournir des \textit{workflows} \textit{one-click}\footnote{\textbf{Workflow} « one-click »: enchaînement automatisé d'étapes techniques (ici, de compilation et de déploiement) déclenché par une seule action de l'utilisateur.} pour la mise en ligne des histoires.
-    \item Améliorer l'accessibilité et la documentation utilisateur (guides pas-à-pas, exemples, galerie de templates).
+    \item Develop a guided editor with real-time validation (preview, explicit error messages, templates), to hide the syntactic complexity of \gls{json}.
+    \item Add conversion and import tools (e.g. importing from a more readable format or from a narrative language such as Ink) to reduce the learning curve.
+    \item Extend the engine with conditional branching, richer scenario variables, and an extension API to enable advanced features without modifying the core of the \glsit{runtime}.
+    \item Automate the publishing pipeline (continuous integration → static deployment) and provide \textit{one-click} \textit{workflows}\footnote{\textbf{"One-click" workflow}: an automated chain of technical steps (here, building and deploying) triggered by a single user action.} for publishing stories.
+    \item Improve accessibility and user documentation (step-by-step guides, examples, a template gallery).
 \end{itemize}
 
 \clearpage
 
 
-\subsubsection{Pistes de recherche}
-Plusieurs axes de recherche découlent de ce travail :
+\subsubsection{Research Directions}
+Several research directions emerge from this work:
 
 \begin{itemize}
-    \item L'ajout d'un éditeur graphique ou assisté, visuel ou nodal, superposé au format déclaratif, qui masquerait la syntaxe \gls{json} tout en conservant les avantages du texte brut, comme le suivi de version ou la portabilité.
-    \item La conception d'un langage narratif intermédiaire, plus proche du langage naturel, qui serait ensuite compilé vers le \gls{schema} \gls{json} du moteur, à la manière de langages dédiés comme Ink ou Twine.
-    \item L'intégration d'assistants d'écriture fondés sur des modèles de langage, capables de générer ou de restructurer des fragments narratifs directement dans le format déclaratif.
-    \item L'extension du modèle déclaratif vers une logique narrative plus riche, avec des variables d'état persistantes ou des embranchements conditionnels, et son effet sur la lisibilité du format pour un auteur non-développeur.
-    \item La standardisation ou l'interopérabilité d'un format déclaratif de \gls{vn}, de façon à ce qu'un même script puisse être exécuté par plusieurs moteurs ou plateformes.
-    \item La prise en compte de l'accessibilité, notamment pour les lecteurs d'écran et l'internationalisation, directement au niveau du schéma déclaratif plutôt que comme une couche ajoutée après coup.
+    \item Adding a graphical or assisted editor, visual or node-based, layered on top of the declarative format, which would hide the \gls{json} syntax while retaining the advantages of plain text, such as version tracking or portability.
+    \item Designing an intermediate narrative language, closer to natural language, which would then be compiled into the engine's \gls{json} \gls{schema}, in the manner of dedicated languages such as Ink or Twine.
+    \item Integrating language-model-based writing assistants, capable of generating or restructuring narrative fragments directly within the declarative format.
+    \item Extending the declarative model toward richer narrative logic, with persistent state variables or conditional branching, and its effect on the format's readability for a non-developer author.
+    \item Standardising or ensuring the interoperability of a declarative \gls{vn} format, so that the same script could be run by several engines or platforms.
+    \item Taking accessibility into account, notably for screen readers and internationalisation, directly at the level of the declarative schema rather than as a layer added afterward.
 \end{itemize}
 
-Ces pistes ouvrent des perspectives complémentaires à ce travail, en interrogeant la manière dont le format déclaratif pourrait évoluer pour concilier simplicité d'accès et richesse narrative.
+These directions open up perspectives that complement this work, by questioning how the declarative format could evolve to reconcile ease of access with narrative richness.

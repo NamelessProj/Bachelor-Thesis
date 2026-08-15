@@ -1,49 +1,49 @@
-\section{Mise en \oe{}uvre}
+\section{Implementation}
 \label{chap:MediaProject}
 
-Cette partie constitue le cœur du travail. J’y présente la conception et le développement de \textbf{\ns}, un moteur de \gls{vn} \glsit{opensource} entièrement piloté par des fichiers texte au format \gls{json}. L’auteur rédige son histoire dans un fichier \gls{json} conforme au \gls{schema} défini, puis met le projet en ligne soit en compilant l’application \gls{reactjs} en fichiers statiques via \texttt{npm run build}, soit en passant par une plateforme d’intégration continue comme Vercel\footnote{\textbf{Vercel}: plateforme de déploiement cloud spécialisée dans les applications web statiques et les frameworks \gls{js}. Elle automatise la compilation et la mise en ligne à chaque modification du dépôt source. \parencite{noauthor_vercel_nodate}} ou GitHub Pages\footnote{\textbf{GitHub Pages}: service d'hébergement statique intégré à GitHub, permettant de publier automatiquement le contenu d'un dépôt sous forme de site web accessible via une URL publique, sans configuration serveur. \parencite{noauthor_documentation_nodate}}. Le \gls{vn} final reste ainsi accessible depuis n'importe quel navigateur internet moderne, sans installation côté joueur. Le code source du projet est disponible publiquement sur GitHub à l'adresse suivante: \nsrepo.
+This part forms the core of the work. Here I present the design and development of \textbf{\ns}, an \glsit{opensource} \gls{vn} engine entirely driven by text files in \gls{json} format. The author writes their story in a \gls{json} file that conforms to the defined \gls{schema}, then puts the project online either by compiling the \gls{reactjs} application into static files via \texttt{npm run build}, or through a continuous integration platform such as Vercel\footnote{\textbf{Vercel}: cloud deployment platform specialised in static web applications and \gls{js} frameworks. It automates building and deployment on every change to the source repository. \parencite{noauthor_vercel_nodate}} or GitHub Pages\footnote{\textbf{GitHub Pages}: static hosting service built into GitHub, allowing a repository's content to be automatically published as a website accessible via a public URL, with no server configuration. \parencite{noauthor_documentation_nodate}}. The final \gls{vn} thus remains accessible from any modern web browser, with no installation required on the player's side. The project's source code is publicly available on GitHub at the following address: \nsrepo.
 
-Le développement s’est inscrit dans une logique itérative: chaque itération correspondait à un ensemble de fonctionnalités implémentées, testées et évaluées avant de passer à l’étape suivante.
+The development followed an iterative logic: each iteration corresponded to a set of features that were implemented, tested, and evaluated before moving on to the next step.
 
 
-\subsection{Évolution du périmètre: de la librairie à l'application} 
+\subsection{Scope Evolution: From Library to Application}
 
-Au départ, j’avais prévu de développer \nsits sous forme de \gls{librairie} \gls{reactjs} publiable sur \gls{npm}, intégrable par un développeur tiers via une simple commande d’installation. L’idée était de distribuer le moteur comme un composant réutilisable, indépendamment de toute application hôte.
+Initially, I had planned to develop \nsits as a \gls{reactjs} \gls{librairie} publishable on \gls{npm}, integrable by a third-party developer through a simple install command. The idea was to distribute the engine as a reusable component, independent of any host application.
 
-Afin d'apprendre à mettre en \oe{}uvre cette architecture, deux ressources ont été consultées: une playlist YouTube d'Imran Hussain (son nom d'utilisateur \textit{Imran Codes}) en 2024, intitulée \textit{Building a React Component Library: A Senior Developer's Guide}\parencite{imran_codes_1_2024} (ciblant \gls{reactjs} 16), et un article textuel d'Alex Eagleson publié sur dev.to en novembre 2021, mis à jour en décembre 2022 \parencite{noauthor_how_2021} (ciblant \gls{reactjs} 17 et rollup\footnote{\textbf{Rollup}: outil de bundling \gls{js} spécialisé dans la création de \gls{librairie} distribuables. En mode \gls{librairie} (\textit{\glslink{librairie}{library} mode}), il compile le code source en un ou plusieurs fichiers optimisés, accompagnés des définitions de types \gls{ts}, prêts à être publiés comme \glsit{package} \gls{npm}. \parencite{noauthor_introduction_nodate}} V2). Les deux ressources reposaient sur la même approche: configurer rollup en mode \gls{librairie} via un fichier \texttt{rollup.config.js}, en combinant les \glspl{plugin} \texttt{@rollup/plugin-typescript}, \texttt{@rollup/plugin-commonjs} et \texttt{rollup-plugin-dts}.
-
-\clearpage
-
-Dans les deux cas, la commande de \glsit{build} (\texttt{npm run build}) échouait. Les erreurs rencontrées relevaient de la configuration rollup, dont les exigences ont évolué avec les versions successives de l'outil. L'article d'Eagleson lui-même signale ce problème: une note intégrée au texte indique que certains outils ont été mis à jour et que les instructions telles qu'écrites ne fonctionnent plus. \parencite{noauthor_how_2021} Les commentaires des deux ressources, datant eux aussi d'environ un an, proposaient des correctifs partiels qui n'ont pas permis de résoudre le problème dans le contexte de \gls{reactjs} 19 et des versions actuelles de rollup.
-
-Aucune ressource plus récente, reposant sur une configuration adaptée à \gls{reactjs} 19, n'a pu être identifiée, les tutoriels disponibles utilisaient tous la même approche de configuration, devenue incompatible avec les versions actuelles de l'outillage. Il n'est pas exclu que certaines erreurs rencontrées aient résulté d'une mauvaise interprétation des étapes de configuration de ma part, cette possibilité ne peut être écartée.
-
-Face à ces obstacles et aux contraintes de temps du projet, la décision a été prise de réorienter l'architecture vers une application \gls{reactjs} autonome. Cette approche, plus directement maîtrisable, permet d'atteindre l'objectif principal du projet: rendre la création de \gls{vn} accessible via le web, sans nécessiter la distribution d'un \glsit{package} \gls{npm}.
+To learn how to implement this architecture, two resources were consulted: a 2024 YouTube playlist by Imran Hussain (username \textit{Imran Codes}), titled \textit{Building a React Component Library: A Senior Developer's Guide}\parencite{imran_codes_1_2024} (targeting \gls{reactjs} 16), and a text article by Alex Eagleson published on dev.to in November 2021 and updated in December 2022 \parencite{noauthor_how_2021} (targeting \gls{reactjs} 17 and rollup\footnote{\textbf{Rollup}: \gls{js} bundling tool specialised in building distributable \gls{librairie}s. In \textit{\gls{librairie} mode}, it compiles the source code into one or more optimised files, together with \gls{ts} type definitions, ready to be published as an \gls{npm} \glsit{package}. \parencite{noauthor_introduction_nodate}} V2). Both resources relied on the same approach: configuring rollup in \gls{librairie} mode via a \texttt{rollup.config.js} file, combining the \texttt{@rollup/plugin-typescript}, \texttt{@rollup/plugin-commonjs}, and \texttt{rollup-plugin-dts} \glspl{plugin}.
 
 \clearpage
 
+In both cases, the \glsit{build} command (\texttt{npm run build}) failed. The errors encountered stemmed from the rollup configuration, whose requirements changed across successive versions of the tool. Eagleson's article itself flags this problem: a note embedded in the text indicates that some tools have been updated and that the instructions as written no longer work. \parencite{noauthor_how_2021} The comments on both resources, also roughly a year old, offered partial fixes that did not resolve the problem in the context of \gls{reactjs} 19 and current versions of rollup.
 
-\subsubsection{Stack technique et outils}
+No more recent resource based on a configuration adapted to \gls{reactjs} 19 could be identified; the available tutorials all used the same configuration approach, which has become incompatible with current versions of the tooling. It cannot be ruled out that some of the errors encountered resulted from a misinterpretation of the configuration steps on my part; this possibility cannot be excluded.
 
-Le développement de \nsits repose sur les technologies et outils énumérés dans le tableau \ref{tab:stack}.
+Faced with these obstacles and the project's time constraints, the decision was made to redirect the architecture toward a standalone \gls{reactjs} application. This more directly manageable approach achieves the project's main objective: making \gls{vn} creation accessible via the web, without requiring the distribution of an \gls{npm} \glsit{package}.
+
+\clearpage
+
+
+\subsubsection{Technical Stack and Tools}
+
+The development of \nsits relies on the technologies and tools listed in Table \ref{tab:stack}.
 
 \begin{table}[H]
     \centering
-    \caption{Stack technique et outil utilisés}
+    \caption{Technical stack and tools used}
     \renewcommand{\arraystretch}{1.5}
     \begin{tabular}{p{4cm} p{9cm}}
         \hline
-        \textbf{Outil / Technologie} & \textbf{Rôle dans le projet} \\
+        \textbf{Tool / Technology} & \textbf{Role in the project} \\
         \hline
-        \gls{reactjs} & \Gls{librairie} \gls{js} utilisée pour le rendu du moteur dans le navigateur. \\
+        \gls{reactjs} & \Gls{librairie} \gls{js} used to render the engine in the browser. \\
         \addlinespace
-        \gls{vite} & Outil de \glsit{build} et serveur de développement, permettant un rechargement à chaud rapide lors du développement. \\
+        \gls{vite} & \Glsit{build} tool and development server, enabling fast hot-reloading during development. \\
         \addlinespace
-        \gls{ts} & Surcouche typée de \gls{js}, utilisée pour renforcer la robustesse du code et faciliter la détection d'erreurs avant l'exécution. \\
+        \gls{ts} & Typed superset of \gls{js}, used to strengthen code robustness and make it easier to catch errors before runtime. \\
         \addlinespace
-        \gls{json} & Format de description du contenu narratif, servant de source unique de vérité pour le moteur \\
+        \gls{json} & Format used to describe narrative content, serving as the engine's single source of truth \\
         \addlinespace
-        GitHub & Plateforme d'hébergement du code source et de la gestion des versions via \gls{git}. \\
+        GitHub & Source code hosting and version control platform, via \gls{git}. \\
         \hline
     \end{tabular}
     \label{tab:stack}
@@ -52,38 +52,38 @@ Le développement de \nsits repose sur les technologies et outils énumérés da
 \clearpage
 
 
-\subsubsubsection{Mécanisme d'optimisation React.js} \label{sec:optim_react}
+\subsubsubsection{React.js Optimisation Mechanisms} \label{sec:optim_react}
 
-\gls{reactjs} propose plusieurs mécanismes permettant de réduire le nombre de \glspl{rendu} inutiles et d'améliorer les performances d'une application. Trois d'entre eux ont été utilisés dans le cadre de ce projet \parencite{noauthor_reference_nodate}:
+\gls{reactjs} offers several mechanisms for reducing the number of unnecessary \glspl{rendu} and improving an application's performance. Three of them were used in this project \parencite{noauthor_reference_nodate}:
 
-\texttt{React.memo} est une fonction qui \glslink{override}{court-circuite} le \gls{rendu} d'un composant si ses \texttt{props}\footnote{\textbf{Props} (\textit{properties}): en \gls{reactjs}, objet en lecture seule transmis à un composant par son composant parent pour configurer son affichage ou son comportement. \parencite{noauthor_reference_nodate}} n'ont pas changé depuis le \gls{rendu} précédent. Sans ce mécanisme, tout changement d'état d'un composant parent déclenche le recalcul de l'ensemble de ses composants enfants, qu'ils soient concernés ou non par le changement.
+\texttt{React.memo} is a function that \glslink{override}{short-circuits} a component's \gls{rendu} if its \texttt{props}\footnote{\textbf{Props} (\textit{properties}): in \gls{reactjs}, a read-only object passed to a component by its parent component to configure its display or behaviour. \parencite{noauthor_reference_nodate}} have not changed since the previous \gls{rendu}. Without this mechanism, any state change in a parent component triggers the recomputation of all of its child components, whether or not they are affected by the change.
 
-\texttt{useMemo} est un \glsit{hook} \gls{reactjs} permettant de mettre en cache le résultat d'un calcul coûteux entre deux \glspl{rendu}. Le calcul n'est relancé que si l'une de ses dépendances déclarées a changé, évitant ainsi des recalculs inutiles à chaque \gls{rendu}.
+\texttt{useMemo} is a \glsit{hook} in \gls{reactjs} that caches the result of an expensive computation between two \glspl{rendu}. The computation is only rerun if one of its declared dependencies has changed, avoiding unnecessary recomputation on every \gls{rendu}.
 
-\texttt{useRef} est un \glsit{hook} permettant de persister une valeur entre les \glspl{rendu} sans déclencher de \glslink{rendu}{re-rendu} lors de sa modification. Il est utilisé pour stocker des références à des éléments du \acrshort{dom} ou des valeurs internes dont le changement ne doit pas provoquer de mise à jour de l'interface.
+\texttt{useRef} is a \glsit{hook} that persists a value across \glspl{rendu} without triggering a \glslink{rendu}{re-render} when it changes. It is used to store references to \acrshort{dom} elements or internal values whose change should not trigger an interface update.
 
 
-\subsubsection{Méthode de développement}
+\subsubsection{Development Method}
 
-Le développement a suivi un processus itératif basé sur le cycle \glsit{pdca} (\textit{Plan, Do, Check, Act}), tel que défini dans la méthodologie présentée au chapitre \ref{sec:PDCA}. Chaque itération correspond à un cycle complet: planification des fonctionnalités à implémenter, développement, évaluation par tests fonctionnels, puis décision sur les ajustements à apporter à l'itération suivante.
+Development followed an iterative process based on the \glsit{pdca} cycle (\textit{Plan, Do, Check, Act}), as defined in the methodology presented in Section \ref{sec:PDCA}. Each iteration corresponds to a full cycle: planning the features to implement, development, evaluation through functional tests, then deciding on the adjustments to make for the next iteration.
 
-Ce modèle a été retenu pour sa capacité à intégrer les retours d'évaluation de manière continue, sans nécessiter de redéfinir l'ensemble du périmètre à chaque étape.
+This model was chosen for its ability to continuously incorporate evaluation feedback, without needing to redefine the entire scope at each step.
 
 \clearpage
 
 
-\subsection{Contraintes et limites}
+\subsection{Constraints and Limitations}
 
-\subsubsection{Contrainte de déploiement}
+\subsubsection{Deployment Constraint}
 
-Contrairement aux moteurs de jeux traditionnels qui compilent le projet en un exécutable natif, \nsits repose sur des technologies web. Pour créer un \gls{vn} avec ce moteur, l'auteur doit télécharger le projet, puis rédiger son histoire dans un fichier \gls{json} selon le \gls{schema} défini. Le résultat peut ensuite être mis en ligne de deux manières:
+Unlike traditional game engines that compile the project into a native executable, \nsits relies on web technologies. To create a \gls{vn} with this engine, the author must download the project, then write their story in a \gls{json} file following the defined \gls{schema}. The result can then be put online in two ways:
 
 \begin{itemize}
-    \item En compilant l'application \gls{reactjs} en fichiers statiques via la commande \texttt{npm run build}, puis en hébergeant ces fichiers sur n'importe quel serveur web ou hébergeur statique.
-    \item En connectant le dépôt à une plateforme d'intégration continue telle que Vercel ou GitHub Pages, qui se charge automatiquement de la compilation et du déploiement à chaque modification du projet.
+    \item By compiling the \gls{reactjs} application into static files via the \texttt{npm run build} command, then hosting those files on any web server or static host.
+    \item By connecting the repository to a continuous integration platform such as Vercel or GitHub Pages, which automatically handles building and deployment on every change to the project.
 \end{itemize}
 
-Dans les deux cas, le \gls{vn} final est accessible depuis n'importe quel navigateur internet moderne, sans installation requise côté joueur, voir la figure \ref{fig:deploiement-flux}.
+In both cases, the final \gls{vn} is accessible from any modern web browser, with no installation required on the player's side; see Figure \ref{fig:deploiement-flux}.
 
 \begin{figure}[H]
     \centering
@@ -106,30 +106,30 @@ Dans les deux cas, le \gls{vn} final est accessible depuis n'importe quel naviga
         lbl/.style    = {font=\tiny\itshape, color=clrNote},
     ]
 
-%% ── Rangée 1 : Préparation (Auteur) ─────────────────────────────────────────
+%% ── Row 1: Preparation (Author) ─────────────────────────────────────────
 \node[auteur] at (0,0) (dl)
-    {Récupération du projet\\
+    {Getting the project\\
      \tiny{\texttt{git clone} / ZIP}};
 
 \node[auteur, right=of dl]      (content)
-    {Rédaction JSON + assets\\
-     \tiny{histoire, personnages, médias}};
+    {Writing JSON + assets\\
+     \tiny{story, characters, media}};
 
 \node[auteur, right=of content] (config)
-    {Config. \texttt{App.tsx}\\
+    {Configure \texttt{App.tsx}\\
      \tiny{\texttt{scriptFile=...}}};
 
 \node[auteur, right=of config]  (push)
     {Commit \& push\\
-     \tiny{sur GitHub}};
+     \tiny{to GitHub}};
 
 \draw[arrow] (dl)      -- (content);
 \draw[arrow] (content) -- (config);
 \draw[arrow] (config)  -- (push);
 
-%% ── Rangée 2, gauche : Voie CI/CD ───────────────────────────────────────────
+%% ── Row 2, left: CI/CD path ───────────────────────────────────────────
 \node[cloud] at (-0.8,-1.8) (cicd)
-    {Détection du push\\
+    {Push detected\\
      \tiny{Vercel / GitHub Pages}};
 
 \node[build, right=of cicd]     (buildci)
@@ -137,134 +137,134 @@ Dans les deux cas, le \gls{vn} final est accessible depuis n'importe quel naviga
      \tiny{\texttt{tsc \&\& vite} $\to$ \texttt{dist/}}};
 
 \node[cloud, right=of buildci]  (deployci)
-    {Déploiement auto\\
-     \tiny{URL publique}};
+    {Auto deployment\\
+     \tiny{public URL}};
 
 \draw[arrow] (cicd)    -- (buildci);
 \draw[arrow] (buildci) -- (deployci);
 
-%% ── Rangée 2, droite : Voie manuelle ─────────────────────────────────────────
+%% ── Row 2, right: Manual path ─────────────────────────────────────────
 \node[build] at (7.2,-1.8) (buildman)
-    {Build local\\
+    {Local build\\
      \tiny{\texttt{npm run build} $\to$ \texttt{dist/}}};
 
 \node[alt, right=of buildman]   (upload)
-    {Upload manuel\\
-     \tiny{hébergeur statique}};
+    {Manual upload\\
+     \tiny{static host}};
 
 \node[alt, right=of upload]     (deployman)
-    {Déploiement\\
-     \tiny{URL publique}};
+    {Deployment\\
+     \tiny{public URL}};
 
 \draw[arrow] (buildman) -- (upload);
 \draw[arrow] (upload)   -- (deployman);
 
-%% ── Flèches push → voies ────────────────────────────────────────────────────
+%% ── Arrows push → paths ────────────────────────────────────────────────────
 \draw[arrow] (push.south) -- ++(0, -0.4cm) -| (buildman.north);
 \draw[arrow] (push.south) -- ++(0,-0.4cm) -| (cicd.north);
 
-%% ── Rangée 3 : Exécution (Joueur) ───────────────────────────────────────────
+%% ── Row 3: Execution (Player) ───────────────────────────────────────────
 \node[player] at (6.4,-3.6) (browser)
-    {Navigateur\\
-     \tiny{chargement de l'URL}};
+    {Browser\\
+     \tiny{loading the URL}};
 
 \node[player, right=of browser] (zodwk)
-    {Validation Zod\\
+    {Zod validation\\
      \tiny{+ Web Worker}};
 
 \node[player, right=of zodwk]   (vn)
-    {Rendu du VN\\
-     \tiny{composant \texttt{VNPlayer}}};
+    {VN rendering\\
+     \tiny{\texttt{VNPlayer} component}};
 
 \draw[arrow] (deployci)  |- (browser.west);
 \draw[arrow] (deployman) |- (4.4cm, -2.5cm) |- (browser.west);
 \draw[arrow] (browser) -- (zodwk);
 \draw[arrow] (zodwk)   -- (vn);
 
-%% ── Boîtes de regroupement ───────────────────────────────────────────────────
+%% ── Grouping boxes ───────────────────────────────────────────────────
 \begin{scope}[on background layer]
   \node[draw=clrBorder, dotted, rounded corners=5pt, fill=clrAuteur!20,
         fit=(dl)(content)(config)(push), inner sep=6pt,
-        label={[font=\tiny\bfseries, text=clrBorder]above:Préparation (Auteur)}
+        label={[font=\tiny\bfseries, text=clrBorder]above:Preparation (Author)}
        ] {};
 
   \node[draw=clrBorder, dotted, rounded corners=5pt, fill=clrCloud!20,
         fit=(cicd)(buildci)(deployci), inner sep=6pt,
-        label={[font=\tiny\bfseries, text=clrBorder, yshift=-2pt]above:Voie CI/CD}
+        label={[font=\tiny\bfseries, text=clrBorder, yshift=-2pt]above:CI/CD path}
        ] {};
 
   \node[draw=clrBorder, dotted, rounded corners=5pt, fill=clrAlt!20,
         fit=(buildman)(upload)(deployman), inner sep=6pt,
-        label={[font=\tiny\bfseries, text=clrBorder, yshift=-2pt]above:Voie manuelle}
+        label={[font=\tiny\bfseries, text=clrBorder, yshift=-2pt]above:Manual path}
        ] {};
 
   \node[draw=clrBorder, dotted, rounded corners=5pt, fill=clrPlayer!20,
         fit=(browser)(zodwk)(vn), inner sep=6pt,
-        label={[font=\tiny\bfseries, text=clrBorder, yshift=-2pt]above:Exécution (Joueur)}
+        label={[font=\tiny\bfseries, text=clrBorder, yshift=-2pt]above:Execution (Player)}
        ] {};
 \end{scope}
 
     \end{tikzpicture}
-    \caption{Flux de déploiement de \nsit, de la configuration locale à l'exécution dans le navigateur (Auteur 2026)}
+    \caption{Deployment flow of \nsit, from local configuration to execution in the browser (Author 2026)}
     \label{fig:deploiement-flux}
 \end{figure}
 
 \clearpage
 
-\subsubsection{Contrainte de format}
+\subsubsection{Format Constraint}
 
-Une contrainte fondamentale de ce projet est de rendre le contenu narratif lisible et interprétable à la fois par un humain et par la machine. Le format \gls{json} est retenu pour répondre à cette exigence: son modèle clé/valeur est suffisamment structuré pour être analysé de manière déterministe par le \gls{parseur}, tout en restant accessible à un auteur non-développeur disposé à respecter un \gls{schema} documenté.
+A fundamental constraint of this project is making the narrative content readable and interpretable both by a human and by a machine. The \gls{json} format was chosen to meet this requirement: its key/value model is sufficiently structured to be parsed deterministically by the \gls{parseur}, while remaining accessible to a non-developer author willing to follow a documented \gls{schema}.
 
-Cependant, cette contrainte implique une limite inhérente: l'absence d'interprétation sémantique du langage naturel signifie que l'auteur doit respecter strictement la \gls{syntaxe} définie. Une erreur de structure dans le fichier \gls{json} peut bloquer l'exécution du moteur. La gestion de ces erreurs et le retour d'informations claires à l'auteur constituent donc un objectif de robustesse à adresser au fil des itérations.
-
-
-\subsubsection{Contrainte de périmètre}
-
-Pour des raisons de temps, le périmètre fonctionnel du moteur est limité aux mécaniques fondamentales des \gls{vn}, telles que définies dans le tableau \ref{tab:objectifs_moscow}. D'autres fonctionnalités, telles que la gestion de la musique de fond, des images de personnages ou d'un système de sauvegarde, sont identifiées comme souhaitables, mais ne font pas partie des objectifs primaires de ce travail.
+However, this constraint carries an inherent limitation: the absence of semantic interpretation of natural language means the author must strictly follow the defined \gls{syntaxe}. A structural error in the \gls{json} file can block the engine's execution. Handling these errors and giving the author clear feedback are therefore a robustness goal to be addressed across the iterations.
 
 
-\subsection{Étapes de développement}
+\subsubsection{Scope Constraint}
 
-Le développement de \nsits s'est déroulé en trois itérations successives, chacune suivant  le cycle \glsit{pdca} défini au chapitre \ref{sec:PDCA}. Les objectifs de chaque itération ont été définis en amont selon la priorisation \glsit{moscow} établie au tableau \ref{tab:objectifs_moscow}, et ajustés en fonction des résultats observés à l'issue de chaque cycle.
+For time reasons, the engine's functional scope is limited to the core \gls{vn} mechanics, as defined in Table \ref{tab:objectifs_moscow}. Other features, such as background music, character images, or a save system, are identified as desirable, but are not part of this work's primary objectives.
 
 
-\subsubsection{Première itération: les bases d'un VN}
+\subsection{Development Stages}
+
+The development of \nsits took place over three successive iterations, each following the \glsit{pdca} cycle defined in Section \ref{sec:PDCA}. The objectives of each iteration were defined beforehand according to the \glsit{moscow} prioritisation set out in Table \ref{tab:objectifs_moscow}, and adjusted based on the results observed at the end of each cycle.
+
+
+\subsubsection{First Iteration: The Basics of a VN}
 
 
 \subsubsubsection{Plan}
 
-L'objectif de cette première itération était d'implémenter les mécaniques fondamentales du moteur: l'affichage progressif du texte (effet machine à écrire), la navigation entre scènes et la gestion des choix de dialogue. Ces trois fonctionnalités correspondent aux exigences \textit{Must} du tableau \ref{tab:objectifs_moscow}. Il s'agissait également de définir la structure du \gls{schema} \gls{json} servant de source de contenu, c'est-à-dire les types de n\oe{}uds que le moteur devrait être capable d'interpréter: dialogue, choix, scènes et personnages.
+The objective of this first iteration was to implement the engine's core mechanics: progressive text display (typewriter effect), scene navigation, and dialogue choice handling. These three features correspond to the \textit{Must} requirements in Table \ref{tab:objectifs_moscow}. It also involved defining the structure of the \gls{json} \gls{schema} used as the content source, i.e. the node types the engine would need to be able to interpret: dialogue, choice, scenes, and characters.
 
 
 \subsubsubsection{Do}
 
-J'ai commencé par créer le projet. Pour ce faire, il me fallait choisir un langage, un \glsit{framework} et une structure. Pour le langage, j'ai opté pour \gls{ts}, afin de bénéficier d'un typage statique offrant une sécurité dès la phase de développement, avant même l'exécution. Concernant le \glsit{framework}, j'ai hésité avec Next.js\footnote{\textbf{Next.js}: \glsit{framework} \gls{reactjs} orienté rendu serveur, développé par Vercel \parencite{noauthor_nextjs_nodate}}, mais ce dernier aurait été surdimensionné pour ce projet: \nsits ne nécessite aucun traitement côté serveur (\textit{\glsit{backend}}), tout étant calculé dans le \glsit{frontend}. J'ai donc opté pour \gls{reactjs}, une \gls{librairie} \gls{js} que je connais déjà et qui est parfaitement adaptée à la création de ce projet basé sur des composants, ce qui permet de séparer chaque partie du code.
+I started by creating the project. To do so, I needed to choose a language, a \glsit{framework}, and a structure. For the language, I chose \gls{ts}, to benefit from static typing that provides safety as early as the development phase, before runtime even begins. As for the \glsit{framework}, I hesitated with Next.js\footnote{\textbf{Next.js}: server-rendering-oriented \gls{reactjs} \glsit{framework}, developed by Vercel \parencite{noauthor_nextjs_nodate}}, but it would have been overkill for this project: \nsits requires no server-side processing (\textit{\glsit{backend}}), with everything computed in the \glsit{frontend}. I therefore chose \gls{reactjs}, a \gls{js} \gls{librairie} I was already familiar with and which is perfectly suited to building this component-based project, allowing each part of the code to be kept separate.
 
-Avant même de commencer à créer un seul composant, j'ai commencé à réfléchir à la structure que je souhaitais utiliser pour le fichier \gls{json} qui contiendra l'histoire. Je voulais quelque chose de personnalisable, afin de laisser un maximum de liberté aux personnes souhaitant utiliser ce projet. Pour atteindre cet objectif, il m'a fallu séparer plusieurs éléments, illustrés dans le tableau \ref{tab:obj_json_schema}.
+Even before starting to build a single component, I began thinking about the structure I wanted to use for the \gls{json} file that would hold the story. I wanted something customisable, to leave as much freedom as possible to people wanting to use this project. To achieve this, I had to separate out several elements, illustrated in Table \ref{tab:obj_json_schema}.
 
 \begin{table}[H]
     \centering
-    \caption{Séparation des éléments principaux du fichier JSON}
+    \caption{Separation of the JSON file's main elements}
     \renewcommand{\arraystretch}{1.5}
     \begin{tabular}{p{4cm} p{9cm}}
         \hline
-        \textbf{Objet} & \textbf{Description} \\
+        \textbf{Object} & \textbf{Description} \\
         \hline
-        Les paramètres & Définitions des valeurs par défaut globales de l'application: personnalisation de l'écran titre, de la page de crédits, et des comportements d'affichage. Ces valeurs peuvent être \glslink{override}{surchargées} localement au niveau d'un dialogue. \\
+        Settings & Definitions of the application's global default values: customisation of the title screen, the credits page, and display behaviour. These values can be \glslink{override}{overridden} locally at the dialogue level. \\
         \addlinespace
-        Les personnages & La déclaration des personnages afin d'avoir à un seul endroit tous les personnages et leurs informations. \\
+        Characters & The declaration of characters, so that all characters and their information live in a single place. \\
         \addlinespace
-        L'histoire & Tous les éléments qui serviront à raconter l'histoire. \\
+        The story & All the elements used to tell the story. \\
         \hline
     \end{tabular}
     \label{tab:obj_json_schema}
 \end{table}
 
-Pourquoi ces choix? Pourquoi ne pas mettre les personnages dans l'histoire? Plusieurs réponses à ces questions. Pour commencer, cela donne une structure simple et lisible, tout est séparé selon des objectifs bien précis: ce qui aide l'auteur (les paramètres), ce qui sera utilisé plusieurs fois (les personnages) et le récit. Les personnages, à l'image des variables, sont susceptibles d'apparaître dans de nombreuses scènes. Les centraliser évite ainsi toute répétition dans le fichier. 
+Why these choices? Why not put the characters inside the story? There are several answers to these questions. To begin with, it gives a simple, readable structure: everything is separated according to clear, distinct purposes: what helps the author (settings), what will be used repeatedly (characters), and the narrative itself. Characters, like variables, are likely to appear across many scenes. Centralising them thus avoids any repetition in the file.
 
 \clearpage
 
-L'extrait de code \ref{lst:json_example} montre cette séparation dans un court exemple.
+Code listing \ref{lst:json_example} shows this separation in a short example.
 
 \begin{listing}[H]
 \begin{minted}{json}
@@ -301,21 +301,21 @@ L'extrait de code \ref{lst:json_example} montre cette séparation dans un court 
     }
 }
 \end{minted}
-\caption{Exemple de structure de fichier JSON (Auteur 2026)}
+\caption{Example JSON file structure (Author 2026)}
 \label{lst:json_example}
 \end{listing}
 
 \clearpage
 
-Au fur et à mesure des itérations, le \gls{schema} s'enrichira afin de proposer davantage d'options. Cette approche rend l'ensemble du rendu visuel du \gls{vn} personnalisable directement depuis le fichier \gls{json}, sans qu'il soit nécessaire de modifier le code du moteur: image de fond de chaque scène (clé \texttt{background}), couleur associée à chaque personnage, ainsi que l'apparence de l'écran titre et de la page de crédits, définis au niveau des paramètres (voir tableau \ref{tab:obj_json_schema}). La gestion des polices d'écriture via des variables \acrshort{css}, ajoutée lors de la troisième itération, complète cette personnalisation visuelle.
+As the iterations progressed, the \gls{schema} would grow to offer more options. This approach makes the \gls{vn}'s entire visual rendering customisable directly from the \gls{json} file, with no need to modify the engine's code: each scene's background image (\texttt{background} key), the colour associated with each character, as well as the appearance of the title screen and the credits page, defined at the settings level (see Table \ref{tab:obj_json_schema}). Font management via \acrshort{css} variables, added during the third iteration, rounds out this visual customisation.
 
-Une fois la structure définie, il me fallait commencer le développement. Pour ce faire, il fallait choisir par quoi commencer, et j'ai décidé de commencer par les composants visuels de base. C'est-à-dire par l'écran de titre, l'écran des crédits et un composant d'image de fond.
+Once the structure was defined, I needed to start development. This meant deciding where to start, and I chose to begin with the basic visual components: the title screen, the credits screen, and a background image component.
 
-Comme la page de titre, les crédits et les scènes auront des images de fond. Pour rendre cet usage plus simple, j'ai pris la décision d'en faire un composant à part entière pour m'éviter des répétitions.
+Since the title page, the credits, and the scenes would all have background images, I decided to make it a fully separate component to avoid repetition.
 
-La raison pour laquelle j'ai commencé par les écrans de titre et de crédits au lieu du c\oe{}ur du projet, le \gls{vn}, est que je voulais d'abord me consacrer aux éléments simples qui n'allaient pas avoir beaucoup d'évolution. Une fois ces écrans réalisés, je pouvais me consacrer entièrement au \gls{vn} tout en sachant que les autres écrans étaient déjà faits.
+The reason I started with the title and credits screens instead of the core of the project, the \gls{vn} itself, is that I wanted to first take care of the simple elements that were not going to change much. Once these screens were done, I could devote myself entirely to the \gls{vn}, knowing the other screens were already finished.
 
-Une fois ces éléments réalisés, j'ai commencé à travailler sur le composant que je considère comme le plus important: l'affichage du texte, avec l'effet machine à écrire. Pour rendre ce composant plus puissant, mon intention était de faire en sorte qu'il puisse \glslink{parseur}{parser} des balises \acrshort{html} et de pouvoir mettre en place une \gls{syntaxe} de pauses afin de donner du tonus aux textes. J'ai donc créé un système de \gls{tokenisation} du texte. L'idée est simple: avant l'affichage, le texte brut est découpé en unités, les \textit{tokens}, qui peuvent être soit du texte ordinaire, soit des balises \acrshort{html}, ou encore des temps de pause, comme l'illustre la figure \ref{fig:tokenisation-flux}. Cette séparation permet à l'effet machine à écrire de n'animer que les caractères visibles, sans traiter les balises comme du texte à afficher. Sans cette étape intermédiaire, afficher \texttt{<b>mot</b>} caractère par caractère aurait risqué de produire des balises partielles visibles à l'écran, ou un \acrshort{html} mal formé.
+Once these elements were done, I started working on the component I consider the most important: text display, with the typewriter effect. To make this component more powerful, my intention was for it to be able to \glslink{parseur}{parse} \acrshort{html} tags and to support a pause \gls{syntaxe} to give the text more punch. I therefore built a text \gls{tokenisation} system. The idea is simple: before display, the raw text is split into units, \textit{tokens}, which can be either ordinary text, \acrshort{html} tags, or pause markers, as illustrated in Figure \ref{fig:tokenisation-flux}. This separation lets the typewriter effect animate only the visible characters, without treating tags as text to display. Without this intermediate step, displaying \texttt{<b>word</b>} character by character would have risked producing partial tags visible on screen, or malformed \acrshort{html}.
 
 \begin{figure}[H]
     \centering
@@ -342,121 +342,121 @@ Une fois ces éléments réalisés, j'ai commencé à travailler sur le composan
     lbl/.style     = {font=\scriptsize\itshape, color=clrNote}
     ]
 
-%% ── Colonne principale (gauche) ─────────────────────────────────────────────
- 
+%% ── Main column (left) ─────────────────────────────────────────
+
 \node[input] (raw)
-    {Texte brut \texttt{text}\\
-     \footnotesize{(champ du fichier \gls{json})}};
- 
+    {Raw text \texttt{text}\\
+     \footnotesize{(field from the JSON file)}};
+
 \node[process, below=of raw] (escape)
     {\texttt{escapeHtml()}\\
-     \footnotesize{Protège \texttt{\&}, \texttt{<}, \texttt{>} du HTML}};
- 
+     \footnotesize{Protects \texttt{\&}, \texttt{<}, \texttt{>} from HTML}};
+
 \node[process, below=of escape] (vars)
     {\texttt{getTextWithCharacters()}\\
-     \footnotesize{Résout \texttt{\{\{Alice\}\}} en balise colorée}};
- 
+     \footnotesize{Resolves \texttt{\{\{Alice\}\}} into a coloured tag}};
+
 \node[process, below=of vars] (markup)
     {\texttt{parseMarkup()}\\
-     \footnotesize{Convertit \texttt{[b]}, \texttt{[color]}, \texttt{[link]} en HTML}};
- 
+     \footnotesize{Converts \texttt{[b]}, \texttt{[color]}, \texttt{[link]} into HTML}};
+
 \node[process, below=of markup] (tokenize)
     {\texttt{tokenizeHtmlWithPauses()}\\
-     \footnotesize{Sépare balises, texte et pauses}};
- 
+     \footnotesize{Splits tags, text, and pauses}};
+
 \node[process, below=1.5cm of tokenize] (precompute)
     {\texttt{precomputeSteps()}\\
-     \footnotesize{Précalcul O(n) des \glslink{snaphtml}{snapshots HTML} et délais}};
- 
+     \footnotesize{O(n) precomputation of \glslink{snaphtml}{HTML snapshots} and delays}};
+
 \node[process, below=of precompute] (react)
     {\texttt{htmlToReactNode()}\\
-     \footnotesize{\glslink{snaphtml}{Snapshots HTML} convertis en noeuds React}};
- 
+     \footnotesize{\glslink{snaphtml}{HTML snapshots} converted into React nodes}};
+
 \node[output, below=of react] (render)
-    {Composant \texttt{Typewriter}\\
-     \footnotesize{Affiche un \glslink{snaphtml}{snapshot} par tick via \texttt{setTimeout}}};
- 
-%% ── Flèches verticales ──────────────────────────────────────────────────────
+    {\texttt{Typewriter} component\\
+     \footnotesize{Displays one \glslink{snaphtml}{snapshot} per tick via \texttt{setTimeout}}};
+
+%% ── Vertical arrows ──────────────────────────────────────────────────────
 \draw[arrow] (raw)        -- (escape);
 \draw[arrow] (escape)     -- (vars);
 \draw[arrow] (vars)       -- (markup);
 \draw[arrow] (markup)     -- (tokenize);
-\draw[arrow] (tokenize)   -- node[lbl, right=2pt] {vers tokens} (precompute);
+\draw[arrow] (tokenize)   -- node[lbl, right=2pt] {to tokens} (precompute);
 \draw[arrow] (precompute) -- (react);
 \draw[arrow] (react)      -- (render);
- 
-%% ── Annotations latérales (gauche) ─────────────────────────────────────────
-\node[lbl, left=4pt of escape]    {sécurité};
+
+%% ── Side annotations (left) ─────────────────────────────────────────
+\node[lbl, left=4pt of escape]    {security};
 \node[lbl, left=4pt of vars]      {interpolation};
-\node[lbl, left=4pt of markup]    {mise en forme};
-\node[lbl, left=4pt of tokenize]  {découpage};
+\node[lbl, left=4pt of markup]    {formatting};
+\node[lbl, left=4pt of tokenize]  {splitting};
 \node[lbl, left=4pt of precompute]{optimisation};
 \node[lbl, left=4pt of react]     {\gls{memoisation}};
- 
-%% ── Tableau de tokens (droite) ──────────────────────────────────────────────
+
+%% ── Token table (right) ──────────────────────────────────────────────
 \node[token, right=of tokenize, yshift= 1.6cm] (tok_open)
     {\texttt{openTag}\\
-     \footnotesize{ex. \texttt{<b>}}};
- 
+     \footnotesize{e.g. \texttt{<b>}}};
+
 \node[token, below=0.35cm of tok_open] (tok_close)
     {\texttt{closeTag}\\
-     \footnotesize{ex. \texttt{</b>}}};
- 
+     \footnotesize{e.g. \texttt{</b>}}};
+
 \node[token, below=0.35cm of tok_close] (tok_self)
     {\texttt{selfClosingTag}\\
-     \footnotesize{ex. \texttt{<br/>}}};
- 
+     \footnotesize{e.g. \texttt{<br/>}}};
+
 \node[token, below=0.35cm of tok_self] (tok_text)
     {\texttt{text}\\
-     \footnotesize{caractères visibles}};
- 
+     \footnotesize{visible characters}};
+
 \node[token, below=0.35cm of tok_text] (tok_pause)
     {\texttt{pause}\\
      \footnotesize{\texttt{\textbackslash .}=1000 ms, \texttt{\textbackslash ,}=500 ms}};
- 
-%% Boîte englobante tokens
+
+%% Token bounding box
 \begin{scope}[on background layer]
   \node[draw=clrBorder, dashed, rounded corners=4pt,
         fill=clrToken!25,
         fit=(tok_open)(tok_close)(tok_self)(tok_text)(tok_pause),
         inner sep=8pt,
-        label={[font=\footnotesize\bfseries, text=clrBorder]above:\texttt{Token[]} — types possibles}
+        label={[font=\footnotesize\bfseries, text=clrBorder]above:\texttt{Token[]}: possible types}
        ] (tokbox) {};
 \end{scope}
- 
-%% ── Flèches vers/depuis le tableau de tokens ────────────────────────────────
+
+%% ── Arrows to/from the token table ────────────────────────────────
 \draw[darrow] (tokenize.east)  -- ([xshift=-2pt, yshift=1.4cm]tokbox.west)
-              node[midway, lbl, above=1pt] {produit};
- 
+              node[midway, lbl, above=1pt] {produces};
+
 \draw[darrow] ([yshift=-1.6cm]tokbox.west)  |- (precompute.east);
-    
+
     \end{tikzpicture}
-    \caption{Flux de tokenisation du composant \texttt{Typewriter} (Auteur 2026)}
+    \caption{Tokenization flow of the \texttt{Typewriter} component (Author 2026)}
     \label{fig:tokenisation-flux}
 \end{figure}
 
-Une fois tous ces éléments fonctionnels, le temps était venu pour moi de mettre en place la logique première des \gls{vn}, une navigation entre dialogues et entre scènes. J'ai créé un composant de dialogue, contenant le texte et, par la suite, également le nom de la personne qui parle. J'ai aussi créé le composant de scène, dans lequel le texte et l'image de fond sont réunis.
+Once all these elements were working, it was time for me to put in place the core logic of a \gls{vn}: navigation between dialogues and between scenes. I created a dialogue component, holding the text and, later, also the name of the speaking character. I also created the scene component, which brings together the text and the background image.
 
-Pour l'interactivité, lors d'un clic ou lorsque le joueur appuie sur la touche \textit{Entrée}, soit le dialogue change pour le prochain de la scène courante, soit, si nous sommes au dernier dialogue de la scène, nous sommes amenés à la scène définie par la clé \texttt{next} du dernier dialogue, ou à la page des crédits si cette clé est absente ou si la valeur de la clé est \texttt{"\_\_end\_\_"}.
+For interactivity, on a click or when the player presses \textit{Enter}, either the dialogue changes to the next one in the current scene, or, if we are at the scene's last dialogue, we are taken to the scene defined by that dialogue's \texttt{next} key, or to the credits page if that key is absent or if its value is \texttt{"\_\_end\_\_"}.
 
 \clearpage
 
-Un autre élément ajouté fut la possibilité de faire des choix. J'ai veillé à ce que des boutons puissent apparaître à l'écran, permettant au joueur de choisir quelle voie suivre. Parmi les possibilités, le joueur peut se retrouver dans une autre scène, à un autre dialogue de la scène courante ou à un dialogue précis d'une autre scène. L'auteur peut également choisir d'amener le joueur sur la page des crédits en mettant \texttt{"\_\_end\_\_"} comme valeur dans la clé \texttt{next}.
+Another element I added was the ability to make choices. I made sure that buttons could appear on screen, letting the player choose which path to follow. Among the possible outcomes, the player can end up in another scene, at another dialogue of the current scene, or at a specific dialogue of another scene. The author can also choose to send the player to the credits page by setting \texttt{"\_\_end\_\_"} as the value of the \texttt{next} key.
 
-La figure \ref{fig:NamelessStoryV1} présente l'état du moteur à l'issue de cette première itération.\footnote{Par souci de lisibilité à l'impression, l'ensemble des captures d'écran du moteur présentées dans ce chapitre a été réalisé avec un zoom du navigateur fixé à 175\%. Le rendu réel, au zoom par défaut du navigateur (100\%), affiche donc des éléments proportionnellement plus petits que ceux visibles sur ces figures.\label{fn:zoom175}}
+Figure \ref{fig:NamelessStoryV1} presents the state of the engine at the end of this first iteration.\footnote{For legibility when printed, all engine screenshots shown in this chapter were taken with the browser zoom set to 175\%. The actual rendering, at the browser's default zoom (100\%), therefore displays elements proportionally smaller than those visible in these figures.\label{fn:zoom175}}
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.47\textwidth}
         \includegraphics[width=\textwidth]{img/NamelessStory_V1_home.png}
-        \caption{Écran titre}
+        \caption{Title screen}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.47\textwidth}
         \includegraphics[width=\textwidth]{img/NamelessStory_V1_text.png}
-        \caption{Affichage d'un dialogue}
+        \caption{Dialogue display}
     \end{subfigure}
-    \caption{\nsits à l'issue de la première itération (Auteur 2026)}
+    \caption{\nsits at the end of the first iteration (Author 2026)}
     \label{fig:NamelessStoryV1}
 \end{figure}
 
@@ -465,48 +465,48 @@ La figure \ref{fig:NamelessStoryV1} présente l'état du moteur à l'issue de ce
 
 \subsubsubsection{Check}
 
-À l'issue de cette itération, les mécaniques fondamentales étaient fonctionnelles et vérifiables dans le navigateur à partir d'un fichier \gls{json} de test. Les cas valides ont été testés manuellement: progression du dialogue au clic, navigation vers une autre scène, affichage des choix et sélection d'une option. Des scénarios d'erreur ont également été construits intentionnellement (\glsit{negativetesting}), notamment en fournissant des fichiers \gls{json} structurellement incomplets, afin de vérifier le comportement du moteur face à des données inattendues.
+At the end of this iteration, the core mechanics were functional and verifiable in the browser using a test \gls{json} file. Valid cases were tested manually: dialogue progression on click, navigation to another scene, display of choices, and option selection. Error scenarios were also intentionally constructed (\glsit{negativetesting}), notably by supplying structurally incomplete \gls{json} files, in order to check the engine's behaviour when faced with unexpected data.
 
-Ces tests ont révélé que le moteur adoptait un comportement indéfini face à des données manquantes ou erronées, sans retourner d'informations exploitables à l'auteur: pas de message d'erreur, aucun moyen de savoir quoi corriger.
+These tests revealed that the engine exhibited undefined behaviour when faced with missing or erroneous data, without returning any actionable information to the author: no error message, no way to know what to fix.
 
-M’étant principalement focalisé sur les fonctionnalités, le style laissait encore à désirer. L'essentiel pour moi à ce stade du projet était d'avoir des éléments affichés à l'écran, pas nécessairement qu'ils soient jolis.
+Having focused mainly on functionality, the styling was still lacking. What mattered most to me at this stage of the project was having elements displayed on screen, not necessarily that they looked good.
 
 
 \subsubsubsection{Act}
 
-Ayant une base fonctionnelle, deux options s'offraient à moi pour la suite: traiter le problème des messages d'erreur ou optimiser les performances du moteur. Ne possédant pas encore les connaissances nécessaires en matière de robustesse et de validation, j'ai choisi de m'engager dans un travail d'optimisation afin de garantir que le moteur évite les recalculs inutiles et exploite efficacement les ressources du navigateur.
+With a functional baseline in place, two options were open to me going forward: address the error-message problem or optimise the engine's performance. Not yet having the necessary knowledge of robustness and validation, I chose to focus on optimisation work, to ensure the engine avoided unnecessary recomputation and made efficient use of browser resources.
 
 \clearpage
 
 
-\subsubsection{Deuxième itération: l'optimisation}
+\subsubsection{Second Iteration: Optimisation}
 
 \subsubsubsection{Plan}
 
-L'objectif de cette itération était d'améliorer les performances et la maintenabilité du code produit lors de la première itération. Dans \gls{reactjs}, chaque mise à jour de l'état d'un composant parent déclenche un nouveau \gls{rendu} de l'ensemble de l'arbre de composants enfants. Dans un moteur de \gls{vn}, où l'état global évolue à chaque ligne de dialogue, ce comportement peut provoquer des recalculs inutiles sur des composants dont les données n'ont pas changé. un second axe concernait la gestion de la sauvegarde: l'opération de sérialisation de l'état courant via \texttt{JSON.stringify()} s'exécutait sur le fil principal du navigateur. Cette opération ne pose pas de problème tant que l'objet à sérialiser reste de taille modeste. Cependant, à mesure que l'état s'enrichit (variables de jeu, historique de dialogue, données de progression), cette opération peut devenir coûteuse et bloquer l'interface le temps de son exécution. Afin d'anticiper cette limitation, la décision a été prise de déléguer cette opération à un \gls{webworker}.
+The objective of this iteration was to improve the performance and maintainability of the code produced during the first iteration. In \gls{reactjs}, every state update on a parent component triggers a new \gls{rendu} of the entire tree of child components. In a \gls{vn} engine, where the global state changes with every line of dialogue, this behaviour can cause unnecessary recomputation of components whose data has not changed. A second focus concerned save handling: the operation of serialising the current state via \texttt{JSON.stringify()} was running on the browser's main thread. This is not a problem as long as the object to serialise stays modest in size. However, as the state grows richer (game variables, dialogue history, progress data), this operation can become expensive and block the interface for the duration of its execution. To anticipate this limitation, the decision was made to delegate this operation to a \gls{webworker}.
 
 
 \subsubsubsection{Do}
 
-L'optimisation du \gls{rendu} a porté sur l'ensemble des composants du moteur. Chaque composant a été mémorisé via \texttt{React.memo} (voir section \ref{sec:optim_react}), ce qui permet à \gls{reactjs} de court-circuiter le \gls{rendu} d'un composant si ses \texttt{props} n'ont pas changé depuis le \gls{rendu} précédent. Pour les calculs coûteux effectués à l'intérieur des composants, le \glsit{hook} \texttt{useMemo} a été utilisé afin de mettre les résultats en cache entre les \glspl{rendu}. Des références (\texttt{useRef}) ont également remplacé certains états React où une valeur devait persister sans déclencher de \glslink{rendu}{re-rendu}. Le composant \texttt{Typewriter} a notamment fait l'objet d'une refactorisation significative: les \glslink{snaphtml}{snapshots HTML} et les délais entre caractères sont désormais précalculés en une seule passe avant le début de l'animation, évitant tout recalcul durant la frappe.
+\Gls{rendu} optimisation was applied across all of the engine's components. Each component was memoised via \texttt{React.memo} (see Section \ref{sec:optim_react}), which allows \gls{reactjs} to short-circuit a component's \gls{rendu} if its \texttt{props} have not changed since the previous \gls{rendu}. For expensive computations performed inside components, the \texttt{useMemo} \glsit{hook} was used to cache results between \glspl{rendu}. References (\texttt{useRef}) also replaced some React state where a value needed to persist without triggering a \glslink{rendu}{re-render}. The \texttt{Typewriter} component in particular underwent significant refactoring: \glslink{snaphtml}{HTML snapshots} and the delays between characters are now precomputed in a single pass before the animation starts, avoiding any recomputation while typing.
 
-L'extrait de code \ref{lst:typewriter} illustre la stratégie d'optimisation du composant \texttt{Typewriter}. Avant le début de l'animation, \texttt{precomputeSteps} calcule en une seule passe l'ensemble des \glslink{snaphtml}{snapshots HTML} et des délais associés à chaque caractère. Ces snapshots sont ensuite convertis en n\oe{}uds React via un second \texttt{useMemo}, dont les dépendances sont strictement séparées du premier. Durant l'animation, le \texttt{useEffect} de tick se limite à lire \texttt{nodeSnapshots[currentStep]} et de planifier le prochain appel via \texttt{setTimeout} avec le délai précompute \texttt{delays[currentStep]}: aucun calcul n'est effectué à chaque frappe. 
+Code listing \ref{lst:typewriter} illustrates the \texttt{Typewriter} component's optimisation strategy. Before the animation starts, \texttt{precomputeSteps} computes, in a single pass, all the \glslink{snaphtml}{HTML snapshots} and the delays associated with each character. These snapshots are then converted into React nodes via a second \texttt{useMemo}, whose dependencies are kept strictly separate from the first. During the animation, the tick \texttt{useEffect} is limited to reading \texttt{nodeSnapshots[currentStep]} and scheduling the next call via \texttt{setTimeout} with the precomputed delay \texttt{delays[currentStep]}: no computation is performed on each keystroke.
 
 \begin{listing}[H]
 \begin{minted}{ts}
-// Pré-calcul unique : 0(n) avant l'animation
+// One-time precomputation: O(n) before the animation
 const precomputed = useMemo(
     () => TypewriterUtils.precomputeSteps(tokens, speed),
     [tokens, speed]
 );
 
-// Conversion des snapshots HTML en nœuds react (une seule fois)
+// Convert HTML snapshots into React nodes (once only)
 const nodeSnapshots: ReactNode[] = useMemo(
     () => precomputed.htmlSnapshots.map(htmlToReactNode),
     [precomputed]
 );
 
-// Avancement : lecture directe à l'index | 0(1) par tick
+// Progression: direct index lookup | O(1) per tick
 useEffect(() => {
     if (currentStep >= totalSteps) {
         if (!completedRef.current) {
@@ -523,19 +523,19 @@ useEffect(() => {
     return () => clearTimeout(timeout);
 }, [currentStep, totalSteps, precomputed, speed, onComplete]);
 \end{minted}
-\caption{Précomputation des instantanés HTML et des délais dans le composant \textit{Typewriter} (Auteur 2026)}
+\caption{Precomputation of HTML snapshots and delays in the \textit{Typewriter} component (Author 2026)}
 \label{lst:typewriter}
 \end{listing}
 
-En parallèle, le traitement de la mise en forme du texte a été revu pour des raisons de sécurité et de robustesse. La propriété React \texttt{dangerouslySetInnerHTML} qui permettait d'injecter directement du \acrshort{html} dans le \acrshort{dom}, a été remplacée par un couple de fonctions dédiées: \texttt{escapeHtml}, qui neutralise les caractères spéciaux avant tout traitement, et \texttt{htmlToReactNode}, qui convertit la chaîne résultante en n\oe{}uds React natifs. Cette approche supprime le risque d'injection de contenu malveillant tout en conservant la flexibilité du balisage personnalisé. Pour garder cette personnalisation des balises dans le texte, un \gls{parseur} inspiré de \gls{markdown} a été mis en place.
+At the same time, text formatting was reworked for security and robustness reasons. The React \texttt{dangerouslySetInnerHTML} property, which allowed \acrshort{html} to be injected directly into the \acrshort{dom}, was replaced by a pair of dedicated functions: \texttt{escapeHtml}, which neutralises special characters before any processing, and \texttt{htmlToReactNode}, which converts the resulting string into native React nodes. This approach removes the risk of malicious content injection while keeping the flexibility of custom markup. To preserve this tag customisation within the text, a \gls{markdown}-inspired \gls{parseur} was put in place.
 
-Pour la sauvegarde, un \gls{webworker} dédié (\texttt{saveWorker}) a été mis en place. Le fil principal transmet l'état courant au \gls{webworker} par échange de messages, celui-ci exécute \texttt{JSON.stringify()} dans son propre fil d'exécution, puis retourne la chaîne sérialisée au fil principal, comme illustré à la figure \ref{fig:webworker-architecture}. Cette communication est entièrement asynchrone: l'interface utilisateur reste réactive pendant toute la durée de l'opération, quelle que soit la taille de l'objet à sérialiser.
+For saving, a dedicated \gls{webworker} (\texttt{saveWorker}) was set up. The main thread passes the current state to the \gls{webworker} by exchanging messages; the worker runs \texttt{JSON.stringify()} on its own execution thread, then returns the serialised string to the main thread, as illustrated in Figure \ref{fig:webworker-architecture}. This communication is entirely asynchronous: the user interface remains responsive for the entire duration of the operation, regardless of the size of the object being serialised.
 
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}[
     every node/.style = {font=\small, align=center},
-    % Boîtes internes
+    % Internal boxes
     box/.style = {
         rectangle, rounded corners=3pt,
         draw=clrBorder, line width=0.8pt,
@@ -545,7 +545,7 @@ Pour la sauvegarde, un \gls{webworker} dédié (\texttt{saveWorker}) a été mis
     main/.style  = {box, fill=clrInput},
     work/.style  = {box, fill=clrToken},
     proc/.style  = {box, fill=clrProcess},
-    % Flèches
+    % Arrows
     arrow/.style = {-{Latex[length=5pt,width=4pt]},
                     line width=0.8pt, color=clrArrow},
     asyncarrow/.style = {-{Latex[length=6pt,width=5pt]},
@@ -555,109 +555,109 @@ Pour la sauvegarde, un \gls{webworker} dédié (\texttt{saveWorker}) a été mis
     ]
 
 %% ═══════════════════════════════════════════════════════
-%% COLONNE GAUCHE — Fil principal
+%% LEFT COLUMN — Main thread
 %% ═══════════════════════════════════════════════════════
- 
-% Nœuds internes fil principal (x = -3.8cm)
+
+% Main thread internal nodes (x = -3.8cm)
 \node[main] at (-3.8cm,  2.6cm) (ui)
-    {Rendu de l'interface\\
-     \footnotesize{utilisateur (60 FPS)}};
- 
+    {User interface\\
+     \footnotesize{rendering (60 FPS)}};
+
 \node[main] at (-3.8cm,  0.5cm) (input)
-    {Interactions utilisateur\\
-     \footnotesize{(clics, saisie)}};
- 
+    {User interactions\\
+     \footnotesize{(clicks, input)}};
+
 \node[main] at (-3.8cm, -1.6cm) (dom)
-    {Mise à jour du DOM};
- 
-% Flèches internes fil principal (double sens)
+    {DOM update};
+
+% Main thread internal arrows (two-way)
 \draw[arrow, -{Latex[length=4pt,width=3.5pt]}]
     ([xshift= 6pt]ui.south)    -- ([xshift= 6pt]input.north);
 \draw[arrow, -{Latex[length=4pt,width=3.5pt]}]
     ([xshift=-6pt]input.north) -- ([xshift=-6pt]ui.south);
- 
+
 \draw[arrow, -{Latex[length=4pt,width=3.5pt]}]
     ([xshift= 6pt]input.south) -- ([xshift= 6pt]dom.north);
 \draw[arrow, -{Latex[length=4pt,width=3.5pt]}]
     ([xshift=-6pt]dom.north)   -- ([xshift=-6pt]input.south);
- 
-% Boîtes de déclenchement et confirmation
+
+% Trigger and confirmation boxes
 \node[main, minimum width=2.6cm] at (-0.3cm,  2.6cm) (trigger)
-    {Déclenchement\\de sauvegarde};
- 
+    {Triggering\\a save};
+
 \node[main, minimum width=2cm] at (-0.5cm, -1.4cm) (confirm)
-    {Sauvegarde\\terminée \& \\ confirmée};
- 
+    {Save\\completed \& \\ confirmed};
+
 %% ═══════════════════════════════════════════════════════
-%% COLONNE DROITE — Web Worker
+%% RIGHT COLUMN — Web Worker
 %% ═══════════════════════════════════════════════════════
- 
+
 \node[work] at (5.8cm,  2.6cm) (rawdata)
-    {Données de sauvegarde\\
-     \footnotesize{(objet brut)}};
- 
+    {Save data\\
+     \footnotesize{(raw object)}};
+
 \node[proc] at (5.8cm,  1.2cm) (stringify)
     {\texttt{JSON.stringify(Object)}};
- 
+
 \node[proc] at (5.8cm,  0.0cm) (jsonstr)
-    {Chaîne JSON résultante};
- 
+    {Resulting JSON string};
+
 \node[work] at (5.8cm, -1.4cm) (calctime)
-    {Temps de calcul\\
-     \footnotesize{(non-bloquant pour l'UI)}};
- 
-% Flèches internes Web Worker
+    {Computation time\\
+     \footnotesize{(non-blocking for the UI)}};
+
+% Web Worker internal arrows
 \draw[arrow] (rawdata)   -- (stringify);
 \draw[arrow] (stringify) -- (jsonstr);
 \draw[arrow] (jsonstr)   -- (calctime);
- 
+
 %% ═══════════════════════════════════════════════════════
-%% FLÈCHES ASYNCHRONES inter-zones
+%% ASYNCHRONOUS ARROWS between zones
 %% ═══════════════════════════════════════════════════════
- 
-% Requête : trigger -> rawdata
+
+% Request: trigger -> rawdata
 \draw[asyncarrow] ([yshift=-0.4cm]trigger.east)
-    -- node[lblbf, below=3pt, text width=1.7cm, xshift=-0.1cm, fill=clrOutput!40, line width=0.6pt, draw=clrOutput, rounded corners=3pt] {requête asynchrone}
+    -- node[lblbf, below=3pt, text width=1.7cm, xshift=-0.1cm, fill=clrOutput!40, line width=0.6pt, draw=clrOutput, rounded corners=3pt] {async request}
     ([yshift=-0.4cm]rawdata.west);
- 
-% Réponse : calctime -> confirm
+
+% Response: calctime -> confirm
 \draw[asyncarrow] ([yshift=-0.4cm]calctime.west)
-    -- node[lblbf, below=6pt, text width=1.7cm, xshift=0.2cm, fill=clrOutput!40, line width=0.6pt, draw=clrOutput, rounded corners=3pt] {réponse asynchrone}
+    -- node[lblbf, below=6pt, text width=1.7cm, xshift=0.2cm, fill=clrOutput!40, line width=0.6pt, draw=clrOutput, rounded corners=3pt] {async response}
     ([yshift=-0.4cm]confirm.east);
- 
+
 %% ═══════════════════════════════════════════════════════
-%% BOÎTES ENGLOBANTES
+%% BOUNDING BOXES
 %% ═══════════════════════════════════════════════════════
- 
+
 \begin{scope}[on background layer]
   \node[draw=clrBorder, rounded corners=6pt,
         fill=clrInput!40, line width=1pt,
         fit=(ui)(input)(dom)(trigger)(confirm),
         inner sep=12pt,
         label={[font=\normalsize\bfseries, text=clrBorder]
-               above:Fil principal \normalfont\footnotesize (Main Thread)}
+               above:Main Thread}
        ] (mainbox) {};
- 
+
   \node[draw=clrBorder, rounded corners=6pt,
         fill=clrToken!40, line width=1pt,
         fit=(rawdata)(stringify)(jsonstr)(calctime),
         inner sep=12pt,
         label={[font=\normalsize\bfseries, text=clrBorder]
-               above:Web Worker \normalfont\footnotesize (dédié à la sérialisation)}
+               above:Web Worker \normalfont\footnotesize (dedicated to serialisation)}
        ] (workerbox) {};
 \end{scope}
-    
+
     \end{tikzpicture}
-    \caption{Architecture de séparation fil principal/Web Worker pour la sauvegarde (Auteur 2026)}
+    \caption{Main thread/Web Worker separation architecture for saving (Author 2026)}
     \label{fig:webworker-architecture}
 \end{figure}
 
 
-L'extrait de code \ref{lst:saveworker} présente les deux composants de cette architecture. Côté fil secondaire, le \texttt{worker} reçoit via \texttt{postMessage} un objet contenant l'état courant et le nom du cookie cible, exécute \texttt{JSON.stringify} dans son propre fil d'exécution, puis retourne la chaîne sérialisée accompagnée du nom du cookie. Ce couplage garantit que le \gls{webworker} ne conserve aucune donnée entre deux appels: il reçoit l'intégralité des informations nécessaires à chaque message et peut être réutilisé pour n'importe quelle opération de sauvegarde sans initialisation supplémentaire. Côté fil principal, le \gls{webworker} est instancié une seule fois à l'initialisation du composant via \texttt{useEffect} et est conservé dans une référence \texttt{useRef} pour éviter des instanciations répétées. La fonction de rappel \texttt{onmessage} reçoit le résultat de manière asynchrone et déclenche l'écriture du cookie sans jamais avoir bloqué le fil de \gls{rendu}.
+Code listing \ref{lst:saveworker} presents the two components of this architecture. On the secondary-thread side, the \texttt{worker} receives, via \texttt{postMessage}, an object containing the current state and the target cookie's name, runs \texttt{JSON.stringify} on its own execution thread, then returns the serialised string together with the cookie name. This coupling guarantees that the \gls{webworker} retains no data between calls: it receives all the information it needs with each message and can be reused for any save operation with no additional initialisation. On the main-thread side, the \gls{webworker} is instantiated only once, when the component is initialised, via \texttt{useEffect}, and is kept in a \texttt{useRef} reference to avoid repeated instantiation. The \texttt{onmessage} callback receives the result asynchronously and triggers the cookie write without ever having blocked the \gls{rendu} thread.
 
 \begin{listing}[H]
 \begin{minted}{ts}
-// workers/saveWorkers.ts (fil secondaire)
+// workers/saveWorkers.ts (secondary thread)
 self.addEventListener("message",
     (e: MessageEvent<SaveWorkerMessage>) => {
         const { state, cookieName } = e.data;
@@ -669,7 +669,7 @@ self.addEventListener("message",
 );
 
 
-// VisualNovel/index.tsx (fil principal)
+// VisualNovel/index.tsx (main thread)
 const saveWorkerRef = useRef<Worker | null>(null);
 
 useEffect(() => {
@@ -689,7 +689,7 @@ useEffect(() => {
     };
 }, []);
 \end{minted}
-\caption{Implémentation du \texttt{saveWorker}: protocole de communication entre le fil principal et le fil secondaire (Auteur 2026)}
+\caption{Implementation of \texttt{saveWorker}: communication protocol between the main thread and the secondary thread (Author 2026)}
 \label{lst:saveworker}
 \end{listing}
 
@@ -698,21 +698,21 @@ useEffect(() => {
 
 \subsubsubsection{Check}
 
-Après plusieurs essais du moteur, les fonctionnalités implémentées lors de la première itération ont été vérifiées et se sont révélées non altérées par les modifications apportées.
+After several trial runs of the engine, the features implemented during the first iteration were checked and found to be unaffected by the changes made.
 
-Afin d'évaluer l'impact des optimisations sur les performances de rendu, cinq sessions de test identiques ont été enregistrées via le \gls{reactprofiler}, sur la version précédente des optimisations (\textit{commit}\footnote{\textbf{Commit}: dans \gls{git}, enregistrement d'un ensemble de modifications apportées au code source à un instant donné, identifié par une empreinte unique (hash) permettant d'y revenir ou de le référencer précisément. \parencite{noauthor_git_nodate}} \texttt{9831b9e}) et sur la version optimisée. Chaque session suivait la même séquence d’interactions sur le même fichier \gls{json} de test, dans le même navigateur.
+To assess the impact of the optimisations on rendering performance, five identical test sessions were recorded using \gls{reactprofiler}, on the version prior to the optimisations (\textit{commit}\footnote{\textbf{Commit}: in \gls{git}, a record of a set of changes made to the source code at a given point in time, identified by a unique fingerprint (hash) allowing it to be reverted to or referenced precisely. \parencite{noauthor_git_nodate}} \texttt{9831b9e}) and on the optimised version. Each session followed the same sequence of interactions on the same test \gls{json} file, in the same browser.
 
 \clearpage
 
-Les tableaux \ref{tab:profiling_before} et \ref{tab:profiling_after} présentent les quatre métriques relevées: le nombre total de \gls{rendu}, la durée moyenne par \gls{rendu}, la durée maximale observée et la durée cumulée de l'ensemble des \glspl{rendu} de la session.
+Tables \ref{tab:profiling_before} and \ref{tab:profiling_after} present the four metrics recorded: the total number of \glspl{rendu}, the average duration per \gls{rendu}, the maximum duration observed, and the cumulative duration of all \glspl{rendu} in the session.
 
 \begin{table}[H]
     \centering
-    \caption{Mesures de performances avant optimisation (cinq sessions)}
+    \caption{Performance measurements before optimisation (five sessions)}
     \renewcommand{\arraystretch}{1.5}
     \begin{tabular}{p{0.8cm} p{2.5cm} p{3cm} p{3cm} p{3cm}}
         \hline
-        \textbf{N°} & \textbf{Rendus} & \textbf{Durée moy. (ms)} & \textbf{Durée max. (ms)} & \textbf{Durée totale (ms)} \\
+        \textbf{No.} & \textbf{Renders} & \textbf{Avg. duration (ms)} & \textbf{Max. duration (ms)} & \textbf{Total duration (ms)} \\
         \hline
         1 & 688 & 0.165 & 2.90 & 113.70 \\
         2 & 689 & 0.166 & 2.90 & 114.50 \\
@@ -723,17 +723,17 @@ Les tableaux \ref{tab:profiling_before} et \ref{tab:profiling_after} présentent
         \textbf{*} & \textbf{688} & \textbf{0.165} & \textbf{3.00} & \textbf{113.70} \\
         \hline
     \end{tabular}
-    \par\smallskip{\footnotesize * Médiane des cinq sessions}
+    \par\smallskip{\footnotesize * Median of the five sessions}
     \label{tab:profiling_before}
 \end{table}
 
 \begin{table}[H]
     \centering
-    \caption{Mesures de performances après optimisation (cinq sessions)}
+    \caption{Performance measurements after optimisation (five sessions)}
     \renewcommand{\arraystretch}{1.5}
     \begin{tabular}{p{0.8cm} p{2.5cm} p{3cm} p{3cm} p{3cm}}
         \hline
-        \textbf{N°} & \textbf{Rendus} & \textbf{Durée moy. (ms)} & \textbf{Durée max. (ms)} & \textbf{Durée totale (ms)} \\
+        \textbf{No.} & \textbf{Renders} & \textbf{Avg. duration (ms)} & \textbf{Max. duration (ms)} & \textbf{Total duration (ms)} \\
         \hline
         1 & 476 & 0.335 & 19.90 & 159.50 \\
         2 & 492 & 0.320 & 18.30 & 157.60 \\
@@ -744,13 +744,13 @@ Les tableaux \ref{tab:profiling_before} et \ref{tab:profiling_after} présentent
         \textbf{*} & \textbf{492} & \textbf{0.321} & \textbf{18.30} & \textbf{158.30} \\
         \hline
     \end{tabular}
-    \par\smallskip{\footnotesize * Médiane des cinq sessions}
+    \par\smallskip{\footnotesize * Median of the five sessions}
     \label{tab:profiling_after}
 \end{table}
 
 \clearpage
 
-Les figures \ref{fig:profiling_renders} et \ref{fig:profiling_maxdur} illustrent respectivement l'évolution du nombre de \gls{rendu} et de la durée maximale entre les deux versions.
+Figures \ref{fig:profiling_renders} and \ref{fig:profiling_maxdur} illustrate, respectively, the change in the number of \glspl{rendu} and in the maximum duration between the two versions.
 
 \begin{figure}[H]
     \centering
@@ -762,7 +762,7 @@ Les figures \ref{fig:profiling_renders} et \ref{fig:profiling_maxdur} illustrent
             height=8cm,
             ymin=400,
             ymax=750,
-            ylabel={Nombre de rendus},
+            ylabel={Number of renders},
             xtick=data,
             xticklabels={Session 1, Session 2, Session 3, Session 4, Session 5},
             legend style={at={(0.5,-0.18)}, anchor=north, legend columns=2},
@@ -774,10 +774,10 @@ Les figures \ref{fig:profiling_renders} et \ref{fig:profiling_maxdur} illustrent
             coordinates {(1,688) (2,689) (3,689) (4,688) (5,688)};
         \addplot[fill=teal!60, draw=teal!80]
             coordinates {(1,476) (2,492) (3,492) (4,492) (5,493)};
-        \legend{Avant optimisation, Après optimisation}
+        \legend{Before optimisation, After optimisation}
         \end{axis}
     \end{tikzpicture}
-    \caption{Nombre de rendus par session avant et après optimisation (\textit{commit} \texttt{9831b9e}) mesuré via React DevTools Profiler (Auteur 2026)}
+    \caption{Number of renders per session before and after optimisation (\textit{commit} \texttt{9831b9e}) measured via React DevTools Profiler (Author 2026)}
     \label{fig:profiling_renders}
 \end{figure}
 
@@ -791,7 +791,7 @@ Les figures \ref{fig:profiling_renders} et \ref{fig:profiling_maxdur} illustrent
             height=8cm,
             ymin=0,
             ymax=25,
-            ylabel={Durée maximale (ms)},
+            ylabel={Maximum duration (ms)},
             xtick=data,
             xticklabels={Session 1, Session 2, Session 3, Session 4, Session 5},
             legend style={at={(0.5,-0.18)}, anchor=north, legend columns=2},
@@ -803,41 +803,41 @@ Les figures \ref{fig:profiling_renders} et \ref{fig:profiling_maxdur} illustrent
             coordinates {(1,2.9) (2,2.9) (3,3.1) (4,3.1) (5,3.0)};
         \addplot[fill=teal!60, draw=teal!80]
             coordinates {(1,19.9) (2,18.3) (3,18.4) (4,18.3) (5,18.2)};
-        \legend{Avant optimisation, Après optimisation}
+        \legend{Before optimisation, After optimisation}
         \end{axis}
     \end{tikzpicture}
-    \caption{Durée maximale de rendu par session avant et après optimisation (\textit{commit} \texttt{9831b9e}) mesurée via React DevTools Profiler (Auteur 2026)}
+    \caption{Maximum render duration per session before and after optimisation (\textit{commit} \texttt{9831b9e}) measured via React DevTools Profiler (Author 2026)}
     \label{fig:profiling_maxdur}
 \end{figure}
 
 \clearpage
 
-Les mesures révèlent un résultat nuancé. Le nombre de \glspl{rendu} a diminué de 28.5\% (688 → 492), confirmant l'effet de \texttt{React.memo}: des \glslink{rendu}{re-rendus} inutiles ont été éliminés. En revanche, la durée moyenne par \gls{rendu} a augmenté (0.165ms → 0.321ms), et le pic maximal est passé de 3ms à 18.3ms. Ce comportement est cohérent avec la stratégie de précomputation adoptée par le composant \texttt{Typewriter}: le coût de calcul est concentré sur le \gls{rendu} initial plutôt que distribué sur chaque caractère affiché. Pour des performances globales comparables, la version optimisée impose donc une charge moindre au fil principal du navigateur sur la durée d'une session.
+The measurements reveal a nuanced result. The number of \glspl{rendu} decreased by 28.5\% (688 → 492), confirming the effect of \texttt{React.memo}: unnecessary \glslink{rendu}{re-renders} were eliminated. On the other hand, the average duration per \gls{rendu} increased (0.165ms → 0.321ms), and the peak maximum rose from 3ms to 18.3ms. This behaviour is consistent with the precomputation strategy adopted by the \texttt{Typewriter} component: the computational cost is concentrated on the initial \gls{rendu} rather than spread across each displayed character. For comparable overall performance, the optimised version therefore places a lighter load on the browser's main thread over the course of a session.
 
 
 \subsubsubsection{Act}
 
-Les optimisations apportées lors de cette itération ayant atteint leur objectif principal, l'axe de travail suivant était déjà identifié depuis la première itération: le traitement des erreurs et la validation des données. Le moteur étant désormais performant, il convenait de s'assurer qu'il soit également robuste face à des fichiers \gls{json} invalides ou incomplets. La troisième itération a donc été consacrée à la recherche et à la mise en place d'un système de validation du \gls{schema}.
+With the optimisations made during this iteration having met their main objective, the next area of work had already been identified since the first iteration: error handling and data validation. With the engine now performant, it was time to ensure it was also robust when faced with invalid or incomplete \gls{json} files. The third iteration was therefore dedicated to researching and implementing a \gls{schema} validation system.
 
 
-\subsubsection{Troisième itération: la sécurité et la robustesse}
+\subsubsection{Third Iteration: Security and Robustness}
 
 \subsubsubsection{Plan}
 
-L'objectif de cette itération était d'adresser la limite principale identifiée lors des itérations précédentes: l'absence de validation formelle des fichiers \acrshort{json} fournis par l'auteur. Sans mécanisme de vérification, un fichier syntaxiquement  invalide ou non conforme au \gls{schema} attendu pouvait mettre le moteur dans un état indéterminé, sans retour d'information exploitable pour l'auteur. L'intégration de la \gls{librairie} \gls{zod}, présentée au chapitre \ref{sec:zod}, constituait la réponse à cette lacune.
+The objective of this iteration was to address the main limitation identified during the previous iterations: the absence of formal validation of the \acrshort{json} files supplied by the author. Without a verification mechanism, a syntactically invalid file, or one that did not conform to the expected \gls{schema}, could put the engine into an indeterminate state, with no actionable feedback for the author. Integrating the \gls{zod} \gls{librairie}, presented in Section \ref{sec:zod}, was the response to this gap.
 
-Par ailleurs, la découverte de \gls{zod} n'a pas été le fruit d'une recherche ciblée, mais d'une rencontre fortuite sur GitHub, où la \gls{librairie} apparaissait fréquemment dans des projets \gls{ts} traitant de la validation de \gls{schema}. Avant de l'adopter, deux alternatives ont été évaluées: TypeBox\footnote{\textbf{TypeBox}: \gls{librairie} de validation de \gls{schema} \gls{ts} basé sur \gls{json}, développée par Haydn Paterson \parencite{noauthor_typebox_nodate}}  et ArkType\footnote{\textbf{ArkType}: \gls{librairie} de validation et d'inférence de types pour \gls{ts}, axée sur la performance et une \gls{syntaxe} inspirée de la notion native du langage \parencite{noauthor_arktype_nodate}}. TypeBox propose une approche similaire à \gls{zod}, tandis qu'ArkType repose sur une \gls{syntaxe} sensiblement différente, dont la prise en main s'est révélée moins immédiate. Le choix s'est finalement porté sur \gls{zod} pour la concision et la lisibilité de sa \gls{syntaxe}, un critère important dans l'optique de maintenir un code accessible aux contributeurs potentiels du projet.
+Discovering \gls{zod} was not the result of a targeted search, but of a chance encounter on GitHub, where the \gls{librairie} appeared frequently in \gls{ts} projects dealing with \gls{schema} validation. Before adopting it, two alternatives were evaluated: TypeBox\footnote{\textbf{TypeBox}: \gls{json}-based \gls{ts} \gls{schema} validation \gls{librairie}, developed by Haydn Paterson \parencite{noauthor_typebox_nodate}} and ArkType\footnote{\textbf{ArkType}: validation and type-inference \gls{librairie} for \gls{ts}, focused on performance and a \gls{syntaxe} inspired by the language's native notation \parencite{noauthor_arktype_nodate}}. TypeBox offers an approach similar to \gls{zod}, while ArkType relies on a noticeably different \gls{syntaxe}, which proved less immediate to pick up. The choice ultimately fell on \gls{zod} for the conciseness and readability of its \gls{syntaxe}, an important criterion when it comes to keeping the code accessible to the project's potential contributors.
 
 \clearpage
 
-Par ailleurs, cette itération a permis d'implémenter plusieurs fonctionnalités \textit{Can} identifiées au tableau \ref{tab:objectifs_moscow}, dont le temps disponible n'avait pas permis l'intégration lors des itérations précédentes: l'affichage des \glsplit{sprite} de personnages avec positionnement dynamique, les transitions entre scènes et dialogues, la gestion des polices d'écriture via des variables \acrshort{css}, et la prise en charge d'un \glsit{placeholder} dynamique pour les champs de saisie.
+This iteration also made it possible to implement several \textit{Can} features identified in Table \ref{tab:objectifs_moscow}, which available time had not allowed integrating during the previous iterations: displaying character \glsplit{sprite} with dynamic positioning, transitions between scenes and dialogues, font management via \acrshort{css} variables, and support for a dynamic \glsit{placeholder} for input fields.
 
 
 \subsubsubsection{Do}
 
-L'intégration de \gls{zod} s'est articulée autour de deux \glspl{schema} de validation distincts. Le premier, \texttt{storySchema}, décrit la structure attendue du fichier \acrshort{json} de scénario: types de n\oe{}uds, présence des champs obligatoires, valeurs autorisées pour les propriétés énumérées. Le second, \texttt{saveSchema}, couvre la structure des fichiers de sauvegarde afin de détecter et de rejeter tout fichier corrompu ou modifié manuellement avant qu'il ne soit transmis au moteur. En cas d'écart par rapport au \gls{schema} défini (champ manquant, type incorrect, structure invalide), \gls{zod} retourne un message d'erreur explicite indiquant précisément la localisation et la nature du problème, ce qui constitue un mécanisme de détection d'erreurs déterministe et un retour direct pour l'auteur.
+The integration of \gls{zod} was built around two distinct validation \glspl{schema}. The first, \texttt{storySchema}, describes the expected structure of the scenario's \acrshort{json} file: node types, presence of required fields, allowed values for enumerated properties. The second, \texttt{saveSchema}, covers the structure of save files, in order to detect and reject any corrupted or manually modified file before it is passed to the engine. In case of a discrepancy from the defined \gls{schema} (missing field, incorrect type, invalid structure), \gls{zod} returns an explicit error message precisely indicating the location and nature of the problem, which constitutes a deterministic error-detection mechanism and direct feedback for the author.
 
-L'extrait de code \ref{lst:storyschema} présente un extrait du \texttt{VNStorySchema}. La validation s'articule en deux niveaux. le premier est déclaratif: chaque champ du fichier \gls{json} est typé explicitement via les primitives \gls{zod} (\texttt{z.string()}, \texttt{z.number().positive()}, \texttt{z.enum([...])}), ce qui permet de détecter à l'exécution tout champ manquant, tout type incorrect ou toute valeur hors des options autorisées. Le second niveau, implémenté via \texttt{superRefine}, effectue une validation sémantique cross-champs impossible à exprimer avec des types seuls: il vérifie que la scène référencée par \texttt{startingScene} existe bien dans le bloc \texttt{story} et que l'ensemble des cibles de navigation (champs \texttt{next} des dialogues et des options) pointe vers des scènes déclarées. En cas d'écart, \texttt{ctx.addIssue} produit un message d'erreur incluant le chemin exact du champ fautif, tel qu'illustré à la figure \ref{fig:zod_erreurs}.
+Code listing \ref{lst:storyschema} presents an excerpt of \texttt{VNStorySchema}. Validation operates on two levels. The first is declarative: each field of the \gls{json} file is explicitly typed via \gls{zod} primitives (\texttt{z.string()}, \texttt{z.number().positive()}, \texttt{z.enum([...])}), which makes it possible to catch at runtime any missing field, incorrect type, or value outside the allowed options. The second level, implemented via \texttt{superRefine}, performs cross-field semantic validation that cannot be expressed with types alone: it checks that the scene referenced by \texttt{startingScene} does exist in the \texttt{story} block, and that every navigation target (the \texttt{next} fields of dialogues and options) points to a declared scene. In case of a discrepancy, \texttt{ctx.addIssue} produces an error message including the exact path of the offending field, as illustrated in Figure \ref{fig:zod_erreurs}.
 
 \begin{listing}[H]
 \begin{minted}{ts}
@@ -877,56 +877,56 @@ export const VNStorySchema = z.object({
     }
 });
 \end{minted}
-\caption{Extrait du \texttt{VNStorySchema}: validation déclarative et vérification sémantique des références de navigation (Auteur 2026)}
+\caption{Excerpt of \texttt{VNStorySchema}: declarative validation and semantic verification of navigation references (Author 2026)}
 \label{lst:storyschema}
 \end{listing}
 
 \clearpage
 
-Afin de couvrir les cas d'erreur de manière systématique, des fichiers de test dédiés ont été ajoutés au dépôt dans un dossier \texttt{tests/}. Ces fichiers représentent intentionnellement des scénarios invalides: \acrshort{json} à la \gls{syntaxe} cassé (virgule manquante, guillemet non fermé), fichiers avec des champs obligatoires absents, et fichiers avec des valeurs de type incorrect. Ces fichiers sont exclus du \glsit{build} de production via un \glsit{plugin} \gls{vite} dédié.
+To cover error cases systematically, dedicated test files were added to the repository in a \texttt{tests/} folder. These files intentionally represent invalid scenarios: \acrshort{json} with broken \gls{syntaxe} (missing comma, unclosed quotation mark), files with missing required fields, and files with incorrect-type values. These files are excluded from the production \glsit{build} via a dedicated \gls{vite} \glsit{plugin}.
 
 
 \subsubsubsection{Check}
 
-Les \glslink{negativetesting}{tests négatifs} réalisés à l'issue de cette itération ont couvert l'ensemble des cas décrits ci-dessus. Dans chaque cas, \gls{zod} a retourné un message d'erreur explicite et le moteur est resté dans un état stable, confirmant le comportement attendu, comme illustré à la figure \ref{fig:zod_erreurs}.
+The \glslink{negativetesting}{negative tests} carried out at the end of this iteration covered all of the cases described above. In each case, \gls{zod} returned an explicit error message and the engine remained in a stable state, confirming the expected behaviour, as illustrated in Figure \ref{fig:zod_erreurs}.
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.47\textwidth}
         \includegraphics[height=4.85cm]{img/zod_invalid_syntax_1.png}
-        \caption{Erreur de syntaxe JSON}
+        \caption{JSON syntax error}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.47\textwidth}
         \includegraphics[height=4.85cm]{img/zod_missing_field_1.png}
-        \caption{Champs obligatoires omis}
+        \caption{Missing required fields}
     \end{subfigure}
-    \caption{Messages d'erreur retournés par Zod lors de la validation du fichier JSON (Auteur 2026)}
+    \caption{Error messages returned by Zod when validating the JSON file (Author 2026)}
     \label{fig:zod_erreurs}
 \end{figure}
 
-La validation des fichiers de sauvegarde a également été testée en fournissant des fichiers modifiés manuellement, qui ont été correctement rejetés avec un message d'erreur remontant jusqu'à l'écran titre.
+Save file validation was also tested by supplying manually modified files, which were correctly rejected with an error message surfacing all the way up to the title screen.
 
 \clearpage
 
-La figure \ref{fig:NamelessStoryFinal} présente l'état du moteur à l'issue de ces trois itérations. La remarque formulée en note de bas de page \ref{fn:zoom175} au sujet du zoom du navigateur vaut également pour ces captures. Le fichier \gls{json} utilisé pour cette capture diffère de celui de la première itération: plutôt qu'une courte histoire, il s'agit d'une démonstration (\textit{"The Feature Tour"}) parcourant l'ensemble des fonctionnalités implémentées dans le moteur.
+Figure \ref{fig:NamelessStoryFinal} presents the state of the engine at the end of these three iterations. The remark made in footnote \ref{fn:zoom175} about browser zoom also applies to these screenshots. The \gls{json} file used for this screenshot differs from the one used in the first iteration: rather than a short story, it is a demo (\textit{"The Feature Tour"}) running through all the features implemented in the engine.
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.47\textwidth}
         \includegraphics[width=\textwidth]{img/NamelessStory_final_home.png}
-        \caption{Écran titre}
+        \caption{Title screen}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.47\textwidth}
         \includegraphics[width=\textwidth]{img/NamelessStory_final_text.png}
-        \caption{Affichage d'un dialogue}
+        \caption{Dialogue display}
     \end{subfigure}
-    \caption{\nsits à l'issue de la troisième itération (Auteur 2026)}
+    \caption{\nsits at the end of the third iteration (Author 2026)}
     \label{fig:NamelessStoryFinal}
 \end{figure}
 
 
 \subsubsubsection{Act}
 
-À l'issue de cette itération, l'ensemble des objectifs \textit{Must} et \textit{Should} définis au tableau \ref{tab:objectifs_moscow} avaient été atteints. Plusieurs fonctionnalités \textit{Can} ont également pu être intégrées. Les fonctionnalités restantes hors périmètre (notamment un éditeur de scénario intégré et une gestion avancée des embranchements narratifs complexes) sont identifiées comme axes de développement futurs dans le chapitre \ref{chap:resultats}.
+At the end of this iteration, all of the \textit{Must} and \textit{Should} objectives defined in Table \ref{tab:objectifs_moscow} had been met. Several \textit{Can} features were also integrated. The remaining out-of-scope features (notably a built-in scenario editor and advanced handling of complex narrative branching) are identified as future development directions in Chapter \ref{chap:resultats}.

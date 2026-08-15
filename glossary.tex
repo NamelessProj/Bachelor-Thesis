@@ -7,6 +7,8 @@
 % =========================================
 \newcommand{\glsit}[1]{\textit{\gls{#1}}}
 \newcommand{\glsplit}[1]{\textit{\glspl{#1}}}
+\newcommand{\Glsit}[1]{\textit{\Gls{#1}}}
+\newcommand{\Glsplit}[1]{\textit{\Glspl{#1}}}
 
 % ==========================
 % ======== Acronyms ========
@@ -14,13 +16,13 @@
 
 \newacronym[description={}]{vn}{VN}{Visual Novel}
 %\newacronym[plural=vn,firstplural={Visual Novels} (VN)]{vn}{VN}{Visual Novel}
-%\newacronym[description={}]{ia}{I.A.}{Intelligence Artificielle}
+%\newacronym[description={}]{ia}{AI}{Artificial Intelligence}
 \newacronym[description={}]{json}{JSON}{JavaScript Object Notation}
 \newacronym[description={}]{yaml}{YAML}{YAML Ain't Markup Language}
 \newacronym[description={}]{toml}{TOML}{Tom's Obvious, Minimal Language}
 \newacronym[description={}]{html}{HTML}{HyperText Markup Language}
-\newacronym[description={}]{dom}{DOM}{Document Object Model (\textit{Modèle Objet de Document})}
-\newacronym[description={}]{css}{CSS}{Cascading Style Sheets (\textit{Feuilles de Style en Cascade})}
+\newacronym[description={}]{dom}{DOM}{Document Object Model}
+\newacronym[description={}]{css}{CSS}{Cascading Style Sheets}
 
 
 
@@ -30,189 +32,189 @@
 
 \newglossaryentry{opensource}{
     name={open source},
-    description={Modèle de développement dans lequel le code source est public et peut être consulté, modifié et redistribué par tous, selon les conditions de sa licence}
+    description={Development model in which the source code is public and can be viewed, modified, and redistributed by anyone, subject to the terms of its license}
 }
 
 \newglossaryentry{js}{
     name={JavaScript},
-    description={Langage de programmation exécuté nativement dans les
-navigateurs web, utilisé pour rendre les pages interactives et dynamiques.
-Il constitue la base technique de ce projet: \gls{reactjs}, la \gls{librairie}
-utilisée pour le moteur, est écrite en JavaScript, et le format \acrshort{json} est
-directement interprétable par ce langage sans dépendance externe}
+    description={Programming language executed natively in web
+browsers, used to make pages interactive and dynamic.
+It forms the technical foundation of this project: \gls{reactjs}, the \gls{librairie}
+used for the engine, is written in JavaScript, and the \acrshort{json} format is
+directly interpretable by this language without any external dependency}
 }
 
 \newglossaryentry{ts}{
     name={TypeScript},
-    description={Surcouche typée de \gls{js}, développée par Microsoft, qui ajoute un système de types statiques au langage. Les types permettent de détecter à la compilation des erreurs qui ne seraient pas visibles à l'exécution en \gls{js} pur. TypeScript est compilé vers \gls{js} standard avant d'être exécuté dans le navigateur \parencite{noauthor_starting_nodate}}
+    description={Typed superset of \gls{js}, developed by Microsoft, which adds a static type system to the language. Types allow errors that would otherwise only surface at runtime in plain \gls{js} to be caught at compile time. TypeScript is compiled to standard \gls{js} before being executed in the browser \parencite{noauthor_starting_nodate}}
 }
 
 \newglossaryentry{reactjs}{
     name={React.js},
-    description={Bibliothèque \gls{js} développée par Meta, utilisée pour construire des interfaces web interactives sous forme de composants réutilisables. Ce projet repose sur React.js pour le rendu du moteur de \acrlong{vn} dans le navigateur}
+    description={\gls{js} library developed by Meta, used to build interactive web interfaces as reusable components. This project relies on React.js to render the \acrlong{vn} engine in the browser}
 }
 
 \newglossaryentry{frontend}{
     name={frontend},
-    description={Partie d'une application web exécutée directement dans le navigateur de l'utilisateur, responsable de l'affichage et des interactions. S'oppose au \glsit{backend}, qui désigne la partie serveur}
+    description={The part of a web application executed directly in the user's browser, responsible for display and interaction. Contrasts with the \glsit{backend}, which designates the server-side part}
 }
 
 \newglossaryentry{syntaxe}{
-    name={syntaxe},
-    description={Ensemble des règles formelles qu'un fichier ou un script doit respecter pour être correctement interprété par un programme. Dans ce projet, ce terme désigne notamment les règles structurelles du format \acrshort{json} utilisé comme source de contenu du moteur}
+    name={syntax},
+    description={The set of formal rules a file or script must follow to be correctly interpreted by a program. In this project, this term refers in particular to the structural rules of the \acrshort{json} format used as the engine's content source}
 }
 
 \newglossaryentry{parseur}{
-    name={parseur},
-    description={Programme ou composant logiciel chargé de lire un fichier texte et d'en interpréter la structure selon des règles définies. Dans ce projet, le parseur analyse le fichier \acrshort{json} du scénario et vérifie qu'il est conforme au \gls{schema} attendu avant de le transmettre au moteur}
+    name={parser},
+    description={Program or software component responsible for reading a text file and interpreting its structure according to defined rules. In this project, the parser analyses the scenario's \acrshort{json} file and checks that it conforms to the expected \gls{schema} before passing it on to the engine}
 }
 
 \newglossaryentry{schema}{
-    name={schéma},
-    description={Au sens informatique, description formelle de la structure attendue d'un fichier de données: quels champs sont obligatoires, quels types de valeurs sont acceptés, et comment les éléments sont organisés. Dans ce projet, le schéma \acrshort{json} définit la structure que doit respecter tout fichier de scénario pour être reconnu et exécuté par le moteur}
+    name={schema},
+    description={In computing, a formal description of the expected structure of a data file: which fields are required, which value types are accepted, and how elements are organised. In this project, the \acrshort{json} schema defines the structure that any scenario file must follow to be recognised and executed by the engine}
 }
 
 \newglossaryentry{librairie}{
-    name={librairie},
-    description={Dans le domaine du développement logiciel, ensemble de composants ou de fonctions réutilisables qu'un développeur peut intégrer dans son propre projet. À ne pas confondre avec son sens courant: il ne s'agit pas d'un lieu physique, mais d'un module logiciel distribuable}
+    name={library},
+    description={In software development, a set of reusable components or functions that a developer can integrate into their own project, as distributed software rather than a physical place}
 }
 
 \newglossaryentry{nocode}{
     name={no-code/low-code},
-    description={Approches de développement logiciel visant à réduire ou 
-    supprimer la nécessité d'écrire du code. Les outils no-code reposent 
-    entièrement sur des interfaces visuelles, tandis que les outils low-code 
-    permettent d'y adjoindre du code pour des besoins spécifiques. Ces 
-    approches visent à rendre la création d'applications accessible à des 
-    utilisateurs sans formation technique}
+    description={Software development approaches aimed at reducing or
+    removing the need to write code. No-code tools rely
+    entirely on visual interfaces, while low-code tools
+    allow code to be added on top for specific needs. These
+    approaches aim to make application creation accessible to
+    users without technical training}
 }
 
 \newglossaryentry{webassembly}{
     name={WebAssembly},
-    description={Format d'instructions binaires permettant d'exécuter dans un navigateur web du code compilé depuis d'autres langages que \gls{js}, avec des performances proches du natif}
+    description={Binary instruction format that allows code compiled from languages other than \gls{js} to run in a web browser, with near-native performance}
 }
 
 \newglossaryentry{backend}{
     name={backend},
-    description={Partie serveur d'une application web, invisible à l'utilisateur final, qui gère la logique métier, le stockage des données et les traitements nécessitant un environnement sécurisé}
+    description={The server-side part of a web application, invisible to the end user, which handles business logic, data storage, and processing that requires a secure environment}
 }
 
 \newglossaryentry{npm}{
     name={npm},
-    description={Gestionnaire de paquets pour \gls{js}, installé avec Node.js. Il permet d'installer, de mettre à jour et de publier des \glspl{librairie} réutilisables (appelées \glsplit{package}) dans un projet \gls{js} ou \gls{ts}. La commande \texttt{npm install} télécharge les dépendances d'un projet, et \texttt{npm run build} exécute un script de compilation défini dans le fichier \texttt{package.json}}
+    description={Package manager for \gls{js}, installed with Node.js. It allows reusable \glspl{librairie} (called \glsplit{package}) to be installed, updated, and published within a \gls{js} or \gls{ts} project. The \texttt{npm install} command downloads a project's dependencies, and \texttt{npm run build} runs a build script defined in the \texttt{package.json} file}
 }
 
 \newglossaryentry{package}{
     name={package},
-    description={Dans le domaine du développement \gls{js}, module logiciel distribué via \gls{npm}, installable dans un projet par une commande. Un package peut être une \gls{librairie} (comme \gls{reactjs} ou \gls{zod}), un outil de \glsit{build} (comme \gls{vite}), ou tout autre ensemble de fonctionnalités réutilisables. À ne pas confondre avec son sens courant de colis ou paquet physique}
+    description={In \gls{js} development, a software module distributed via \gls{npm} and installable in a project through a single command. A package can be a \gls{librairie} (such as \gls{reactjs} or \gls{zod}), a \glsit{build} tool (such as \gls{vite}), or any other set of reusable features}
 }
 
 \newglossaryentry{webworker}{
     name={Web Worker},
-    description={Mécanisme natif des navigateurs web permettant d'exécuter du code \gls{js} dans un fil d'exécution secondaire, séparé du fil principal gérant l'interface utilisateur. Cela permet de déléguer des traitements coûteux en calcul sans bloquer l'affichage ni les interactions de l'utilisateur. Les Web Workers communiquent avec le fil principal par échange de messages, sans accès direct au \acrshort{dom} \parencite{noauthor_utilisation_2025}}
+    description={Native browser mechanism that allows \gls{js} code to run on a secondary execution thread, separate from the main thread that manages the user interface. This makes it possible to offload computationally expensive processing without blocking the display or the user's interactions. Web Workers communicate with the main thread by exchanging messages, without direct access to the \acrshort{dom} \parencite{noauthor_utilisation_2025}}
 }
 
 \newglossaryentry{plugin}{
     name={plugin},
-    description={Module logiciel externe venant s'intégrer à un outil existant pour en étendre les fonctionnalités sans modifier son code source}
+    description={External software module that integrates with an existing tool to extend its functionality without modifying its source code}
 }
 
 \newglossaryentry{override}{
-    name={surcharge},
-    description={(\textit{override}) En développement logiciel, mécanisme permettant de remplacer localement une valeur ou un comportement défini globalement, sans modifier la définition globale}
+    name={override},
+    description={In software development, a mechanism that allows a value or behaviour defined globally to be replaced locally, without modifying the global definition}
 }
 
 \newglossaryentry{tokenisation}{
-    name={tokenisation},
-    description={Processus de découpage d'une chaîne de texte en unités élémentaires appelées \textit{tokens}}
+    name={tokenization},
+    description={The process of splitting a string of text into elementary units called \textit{tokens}}
 }
 
 \newglossaryentry{markdown}{
     name={Markdown},
-    description={Langage de balisage léger créé par John Gruber en 2004, conçu pour être lisible sous forme brute tout en pouvant être converti en \acrshort{html} \parencite{noauthor_daring_nodate}}
+    description={Lightweight markup language created by John Gruber in 2004, designed to be readable in its raw form while being convertible to \acrshort{html} \parencite{noauthor_daring_nodate}}
 }
 
 \newglossaryentry{framework}{
     name={framework},
-    description={Cadre de développement logiciel fournissant une structure imposée et des outils intégrés pour la construction d'application. À distinguer d'une \gls{librairie} : un framework dicte l'architecture du projet, tandis qu'une \gls{librairie} s'intègre dans une architecture existante au choix du développeur}
+    description={Software development framework providing an imposed structure and integrated tools for building an application. To be distinguished from a \gls{librairie}: a framework dictates the project's architecture, whereas a \gls{librairie} is integrated into an existing architecture at the developer's discretion}
 }
 
 \newglossaryentry{rendu}{
-    name={rendu},
-    description={(\textit{render}) En développement d'interfaces web, processus par lequel le navigateur calcule et met à jour l'affichage d'un composant en réponse à un changement d'état ou de données. Dans le contexte de \gls{reactjs}, un rendu désigne spécifiquement l'exécution de la fonction d'un composant et le recalcul de son arbre \acrshort{html} virtuel. Un rendu inutile survient lorsqu'un composant est recalculé sans que ses données aient changé}
+    name={render},
+    description={In web interface development, the process by which the browser computes and updates a component's display in response to a change in state or data. In the context of \gls{reactjs}, a render specifically refers to the execution of a component's function and the recomputation of its virtual \acrshort{html} tree. An unnecessary render occurs when a component is recomputed even though its data has not changed}
 }
 
 \newglossaryentry{zod}{
     name={Zod},
-    description={\Gls{librairie} de validation de \gls{schema} et d'inférence de types pour \gls{ts}, développé par Colin McDonnell \parencite{noauthor_zod_nodate}. Elle permet de définir la structure attendue d'un objet et de valider des données à l'exécution, en produisant des messages d'erreur précis en cas de non-conformité}
+    description={\Gls{schema} validation and type-inference \gls{librairie} for \gls{ts}, developed by Colin McDonnell \parencite{noauthor_zod_nodate}. It allows the expected structure of an object to be defined and data to be validated at runtime, producing precise error messages in case of non-conformance}
 }
 
 \newglossaryentry{hook}{
     name={hook},
-    description={Dans \gls{reactjs}, fonction spéciale dont le nom commence par \texttt{use}, permettant d'accéder à des fonctionnalités du cycle de vie et de l'état d'un composant depuis une fonction \gls{js} ordinaire \parencite{noauthor_reference_nodate}}
+    description={In \gls{reactjs}, a special function whose name begins with \texttt{use}, allowing a component's lifecycle features and state to be accessed from an ordinary \gls{js} function \parencite{noauthor_reference_nodate}}
 }
 
 \newglossaryentry{git}{
     name={Git},
-    description={Système de gestion de versions distribué créé par Linus Torvalds en 2005 \parencite{noauthor_git_nodate}, permettant de suivre l'historique des modifications d'un projet, de travailler sur des branches parallèles et de collaborer à plusieurs sur un même code source}
+    description={Distributed version control system created by Linus Torvalds in 2005 \parencite{noauthor_git_nodate}, used to track a project's change history, work on parallel branches, and collaborate on the same source code with several people}
 }
 
 \newglossaryentry{moscow}{
     name={MoSCoW},
-    description={Méthode de priorisation des exigences issue de la gestion de projet agile. L'acronyme désigne quatre niveaux de priorité: \textit{Must have} (indispensable), \textit{Should have} (important mais non bloquant), \textit{Could have} (souhaitable si le temps le permet) et \textit{Won't have} (hors périmètre pour cette itération) \parencite{clegg_case_1994}}
+    description={Requirements prioritisation method from agile project management. The acronym designates four priority levels: \textit{Must have}, \textit{Should have} (important but not blocking), \textit{Could have} (desirable if time allows), and \textit{Won't have} (out of scope for this iteration) \parencite{clegg_case_1994}}
 }
 
 \newglossaryentry{pdca}{
     name={PDCA},
-    description={Cycle d'amélioration continue en quatre phases: \textit{Plan} (planification), \textit{Do} (mise en \oe{}uvre), \textit{Check} (évaluation) et \textit{Act} (ajustement). Formalisé par W. Edwards Deming \parencite{deming_out_1986}}
+    description={Four-phase continuous improvement cycle: \textit{Plan}, \textit{Do} (implementation), \textit{Check} (evaluation), and \textit{Act} (adjustment). Formalised by W. Edwards Deming \parencite{deming_out_1986}}
 }
 
 \newglossaryentry{vite}{
     name={Vite},
-    description={Outil de \glsit{build} et serveur de développement \glsit{frontend} développé par Evan You, conçu pour offrir un rechargement à chaud rapide et une compilation optimisée pour les projets \gls{js} modernes \parencite{noauthor_vite_nodate}}
+    description={\Glsit{frontend} \glsit{build} tool and development server created by Evan You, designed to offer fast hot-reloading and optimised compilation for modern \gls{js} projects \parencite{noauthor_vite_nodate}}
 }
 
 \newglossaryentry{poc}{
     name={proof of concept},
-    description={Démonstration ou prototype fonctionnel visant à vérifier la faisabilité technique d'une idée ou d'une approche, sans nécessairement couvrir l'ensemble des cas d'usage ni atteindre un niveau de finition production}
+    description={Demonstration or functional prototype intended to verify the technical feasibility of an idea or approach, without necessarily covering every use case or reaching production-level polish}
 }
 
 \newglossaryentry{snaphtml}{
-    name={snapshot HTML},
-    description={Dans le contexte du composant \texttt{Typewriter}, désigne une chaîne de caractères représentant l'état complet du \gls{rendu} \acrshort{html} à un instant donné de l'animation machine à écrire. Chaque snapshot correspond à un nombre précis de caractères visibles affichés, avec les balises \acrshort{html} ouvertes et fermées correctement, permettant un affichage en O(1) par tick d'animation (Auteur 2026)}
+    name={HTML snapshot},
+    description={In the context of the \texttt{Typewriter} component, a string representing the complete \acrshort{html} \gls{rendu} state at a given moment of the typewriter animation. Each snapshot corresponds to a precise number of visible displayed characters, with \acrshort{html} tags correctly opened and closed, enabling O(1) display per animation tick (Author 2026)}
 }
 
 \newglossaryentry{sprite}{
     name={sprite},
-    description={Image ou illustration représentant un personnage ou un élément graphique, affichée par-dessus le décor d'une scène et pouvant être positionnée ou animée indépendamment de celui-ci. Terme issu du développement de jeux vidéo en deux dimensions}
+    description={Image or illustration representing a character or graphical element, displayed over a scene's background and positionable or animatable independently of it. Term originating from two-dimensional video game development}
 }
 
 \newglossaryentry{memoisation}{
-    name={mémoïsation},
-    description={Technique d'optimisation consistant à mettre en cache le résultat d'un calcul ou d'un appel de fonction coûteux, afin de le réutiliser lors d'appels ultérieurs avec les mêmes paramètres plutôt que de le recalculer. À ne pas confondre avec la mémorisation au sens cognitif: il s'agit ici d'un terme technique adapté de l'anglais \textit{memoization}, désignant ce mécanisme de cache}
+    name={memoization},
+    description={Optimisation technique consisting of caching the result of an expensive computation or function call, so that it can be reused on subsequent calls with the same parameters instead of being recomputed}
 }
 
 \newglossaryentry{runtime}{
     name={runtime},
-    description={Environnement d'exécution d'un programme, par opposition à sa compilation. Désigne aussi, par extension, le composant logiciel chargé d'interpréter et d'exécuter un contenu à ce moment-là, par exemple le moteur qui interprète un fichier de scénario dans le navigateur}
+    description={A program's execution environment, as opposed to its compilation. Also refers, by extension, to the software component responsible for interpreting and executing content at that point, for example the engine that interprets a scenario file in the browser}
 }
 
 \newglossaryentry{placeholder}{
     name={placeholder},
-    description={Texte ou valeur temporaire affiché dans un champ de saisie vide, servant d'indication à l'utilisateur sur le contenu attendu, et disparaissant dès que celui-ci commence à saisir une valeur}
+    description={Temporary text or value displayed in an empty input field, indicating to the user the kind of content expected, and disappearing as soon as they begin entering a value}
 }
 
 \newglossaryentry{build}{
     name={build},
-    description={Processus de compilation et d'assemblage du code source d'un projet en fichiers optimisés, prêts à être déployés. Dans ce projet, cette étape est exécutée par la commande \texttt{npm run build}}
+    description={Process of compiling and assembling a project's source code into optimised files ready to be deployed. In this project, this step is executed by the \texttt{npm run build} command}
 }
 
 \newglossaryentry{negativetesting}{
     name={negative testing},
-    description={(\textit{unhappy path testing}) Approche de test visant à vérifier le comportement d'un programme face à des entrées inattendues, invalides ou erronées, par opposition au \textit{positive testing}, qui couvre le comportement attendu en conditions normales. Hora définit les tests négatifs comme ceux qui vérifient «l'exécution anormale, comme les cas exceptionnels» \parencite{hora_test_2024}}
+    description={(\textit{unhappy path testing}) Testing approach aimed at verifying a program's behaviour when faced with unexpected, invalid, or erroneous input, as opposed to \textit{positive testing}, which covers expected behaviour under normal conditions. Hora defines negative tests as those that verify ``abnormal execution, such as exceptional cases''\footnote{French original: «~l'exécution anormale, comme les cas exceptionnels~»} \parencite{hora_test_2024}}
 }
 
 \newglossaryentry{reactprofiler}{
     name={React DevTools Profiler},
-    description={Extension de navigateur développée par Meta Open Source permettant d'enregistrer et d'analyser les performances de rendu d'une application \gls{reactjs}, notamment la durée et la fréquence des cycles de \gls{rendu} par composant \parencite{noauthor_react_nodate}}
+    description={Browser extension developed by Meta Open Source that records and analyses the rendering performance of a \gls{reactjs} application, in particular the duration and frequency of per-component \gls{rendu} cycles \parencite{noauthor_react_nodate}}
 }

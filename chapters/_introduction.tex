@@ -1,45 +1,45 @@
 \section{Introduction}
 
-Ce chapitre pose le cadre du projet et explique pourquoi j’ai choisi de travailler sur un moteur de \gls{vn} web piloté par un script déclaratif. Il présente le contexte, la problématique, les objectifs et la méthode retenue, afin de préciser ce que ce mémoire cherche réellement à démontrer.
+This chapter sets the framework for the project and explains why I chose to work on a web \gls{vn} engine driven by a declarative script. It presents the context, the research question, the objectives, and the method adopted, in order to clarify what this thesis actually seeks to demonstrate.
 
-\subsection{Contexte}
-Le genre du \gls{vn} combine narration, images et sons pour proposer des expériences interactives centrées sur le récit. Ce qui m’a intéressé dans ce format, c’est qu’il met le texte au centre, tout en laissant de la place à la mise en scène et à l’interactivité. En pratique, les moteurs existants offrent souvent des fonctionnalités très complètes, mais ils imposent aussi des étapes de compilation, des dépendances externes ou des chaînes de déploiement qui compliquent la tâche d’un auteur non-développeur. J’ai donc cherché une alternative plus directe: un moteur de \gls{vn} destiné au web, capable d’interpréter un fichier déclaratif sans installation ni compilation côté auteur.
+\subsection{Context}
+The \gls{vn} genre combines narration, images, and sound to offer interactive experiences centred on the story. What interested me about this format is that it places text at the centre, while still leaving room for staging and interactivity. In practice, existing engines often offer very complete feature sets, but they also impose compilation steps, external dependencies, or deployment pipelines that complicate the task for a non-developer author. I therefore looked for a more direct alternative: a web-oriented \gls{vn} engine, able to interpret a declarative file without any installation or compilation on the author's side.
 
-\subsection{Problématique}
-La question centrale est la suivante : dans quelle mesure une architecture de moteur de \acrlong{vn} web, basée sur un format de script déclaratif, permet-elle à des auteurs non-développeurs de créer et de déployer du contenu interactif ? Derrière cette question, il y a un point très concret: est-ce qu’un auteur peut se concentrer sur son histoire, tout en utilisant un format suffisamment simple pour rester lisible, exploitable et publiable directement dans un navigateur ?
+\subsection{Research Question}
+The central question is as follows: to what extent does a web \acrlong{vn} engine architecture based on a declarative script format allow non-developer authors to create and deploy interactive content? Behind this question lies a very concrete point: can an author focus on their story while using a format simple enough to remain readable, usable, and publishable directly in a browser?
 
 \clearpage
 
-\subsection{Objectifs}
-Les objectifs retenus pour ce projet sont expliqués dans le tableau \ref{tab:objectifs_moscow_intro} en utilisant le système de priorisation \glsit{moscow}.
+\subsection{Objectives}
+The objectives set for this project are explained in Table \ref{tab:objectifs_moscow_intro} using the \glsit{moscow} prioritisation system.
 
 \begin{table}[H]
     \centering
-    \caption{Objectifs du projet (priorisation MoSCoW)}
+    \caption{Project objectives (MoSCoW prioritisation)}
     \renewcommand{\arraystretch}{1.4}
     \begin{tabular}{p{1.8cm} p{11.5cm}}
         \hline
-        \textbf{Priorité} & \textbf{Objectif} \\
+        \textbf{Priority} & \textbf{Objective} \\
         \hline
-        Must & Concevoir et implémenter un moteur de \gls{vn} web capable d’interpréter un fichier \gls{json} décrivant une histoire interactive et de la rendre dans un navigateur, sans étape de compilation ni installation côté auteur. \\
+        Must & Design and implement a web \gls{vn} engine able to interpret a \gls{json} file describing an interactive story and render it in a browser, with no compilation step or installation on the author's side. \\
         \addlinespace
-        Should & Fournir une validation de \gls{schema} claire et des messages d’erreur compréhensibles pour un auteur non-développeur, tout en documentant un format de script capable de gérer les embranchements narratifs et les ressources multimédias. \\
+        Should & Provide clear \gls{schema} validation and understandable error messages for a non-developer author, while documenting a script format able to handle narrative branching and multimedia resources. \\
         \addlinespace
-        Can & Ajouter des outils d’aide à la rédaction et quelques fonctions complémentaires légères, comme la sauvegarde locale ou certaines variables de scène, si le temps disponible le permet. \\
+        Can & Add writing-assistance tools and a few lightweight complementary features, such as local save or certain scene variables, if time allows. \\
         \hline
     \end{tabular}
     \label{tab:objectifs_moscow_intro}
 \end{table}
 
-\subsection{Positionnement et contraintes}
-Je privilégie les technologies web natives, en particulier \textit{\gls{reactjs}}, ainsi que \textit{\gls{ts}}, qui se compile en \gls{js} et permet donc une exécution directement dans le navigateur sans dépendance supplémentaire côté client. Ce choix permet une mise en ligne simple et une exécution native dans le navigateur. Le format retenu est le \gls{json}, justement parce qu’il reste lisible dans n’importe quel éditeur de texte et qu’il s’intègre naturellement à l’écosystème web. En contrepartie, ce choix impose une contrainte propre au format: une \gls{syntaxe} fragile, qui nécessite une validation à l’exécution pour limiter les erreurs de saisie. L’absence de \glsit{backend} dans le périmètre relève, elle, d’un choix délibéré et non d’une conséquence du format retenu: elle répond à une logique de sécurité, puisqu’aucune donnée n’est stockée ni transmise à un serveur, ce qui réduit la surface d’attaque du moteur et supprime les risques liés à la gestion de données côté serveur.
+\subsection{Positioning and Constraints}
+I favour native web technologies, in particular \textit{\gls{reactjs}}, as well as \textit{\gls{ts}}, which compiles to \gls{js} and therefore allows execution directly in the browser without any additional dependency on the client side. This choice enables simple deployment and native execution in the browser. The format chosen is \gls{json}, precisely because it remains readable in any text editor and integrates naturally into the web ecosystem. In return, this choice imposes a constraint specific to the format: a fragile \gls{syntaxe}, which requires runtime validation to limit input errors. The absence of a \glsit{backend} from the scope, on the other hand, stems from a deliberate choice rather than a consequence of the chosen format: it follows a security logic, since no data is stored or transmitted to a server, which reduces the engine's attack surface and removes the risks associated with server-side data handling.
 
-\subsection{Groupe cible}
-Le moteur s’adresse d’abord aux auteurs de récits interactifs sans compétences de développement. Il peut aussi intéresser des enseignants qui souhaitent créer un contenu simple et interactif, ainsi que des collectifs indépendants qui recherchent un mode de publication web immédiat.
+\subsection{Target Group}
+The engine is aimed first at authors of interactive stories with no development skills. It may also interest teachers who want to create simple, interactive content, as well as independent collectives looking for an immediate way to publish on the web.
 
-\subsection{Méthodologie et contributions}
-J’adopte une méthode itérative fondée sur le cycle \glsit{pdca}: définir une première base, la développer, vérifier ce qui fonctionne réellement, puis ajuster la suite du travail en fonction des résultats observés. Les contributions attendues sont triples: un \gls{schema} de script déclaratif documenté pour les \gls{vn}, un moteur web capable d’interpréter ce \gls{schema} sans compilation, et une évaluation pratique de la faisabilité pour des auteurs non-développeurs.
+\subsection{Methodology and Contributions}
+I adopt an iterative method based on the \glsit{pdca} cycle: define an initial baseline, develop it, check what actually works, then adjust the rest of the work based on the observed results. The expected contributions are threefold: a documented declarative script \gls{schema} for \glspl{vn}, a web engine able to interpret this \gls{schema} without compilation, and a practical evaluation of its feasibility for non-developer authors.
 
-\subsection{Plan du mémoire}
-Le chapitre \ref{chap:etatDeLart} présente l’état de l’art, en particulier les moteurs existants, les approches \gls{nocode} et les formats de données retenus ou écartés. Le chapitre \ref{chap:methodologie} expose la méthode de travail. Le chapitre \ref{chap:MediaProject} décrit l’implémentation du moteur et les choix techniques effectués. Le chapitre \ref{chap:resultats} analyse les résultats obtenus. Enfin, le chapitre \ref{chap:conclusion} propose une synthèse du travail et des pistes d’évolution.
+\subsection{Thesis Outline}
+Chapter \ref{chap:etatDeLart} presents the state of the art, in particular existing engines, \gls{nocode} approaches, and the data formats chosen or discarded. Chapter \ref{chap:methodologie} sets out the working method. Chapter \ref{chap:MediaProject} describes the engine's implementation and the technical choices made. Chapter \ref{chap:resultats} analyses the results obtained. Finally, Chapter \ref{chap:conclusion} offers a synthesis of the work and possible directions for future development.
 
