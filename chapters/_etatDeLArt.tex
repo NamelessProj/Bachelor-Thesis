@@ -1,0 +1,99 @@
+\section{État de l'art}
+\label{chap:etatDeLart}
+
+\subsection{Le genre Visual Novel}
+
+Le \gls{vn} est un genre de jeu vidéo interactif qui combine narration, visuels, musiques et parfois doublage vocal. Le genre est historiquement ancré dans la culture japonaise et a progressivement gagné en visibilité en Occident, notamment grâce à la diffusion de certaines adaptations animées et à la circulation internationale des œuvres narratives interactives. \parencite{camingue_what_2021}
+
+Sur le plan technique, un \gls{vn} repose sur plusieurs mécaniques fondamentales: une narration textuelle qui progresse par clics, des images statiques représentant les personnages et les décors, des choix de dialogues, et une emphase marquée sur le design sonore et la bande originale. La figure \ref{fig:higurashi_dialogue} illustre ces éléments tels qu'ils apparaissent dans \textit{Higurashi When They Cry Hou - Ch.1 Onikakushi}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\linewidth]{img/higurashi_dialogue.png}
+    \caption{Interface typique d'un Visual Novel: fond, \textit{sprite} de personnage et boîte de dialogue \parencite{07th_expansion_higurashi_2015}}
+    \label{fig:higurashi_dialogue}
+\end{figure}
+
+Camingue, Carstensdottir et Melcer ont relevé que neuf des trente définitions académiques du genre mentionnent la présence de narration à embranchements. Ces structures peuvent aboutir à des expériences très variées: \textit{Steins;Gate 0} (2015) propose six fins différentes, tandis que \textit{428:Shibuya Scramble} (2008) peut mener à pas moins de 95 conclusions distinctes. À l'inverse, 18\% des titres recensés ne comportent aucun embranchement narratif. \parencite{camingue_what_2021}
+
+\clearpage
+
+Du point de vue du marché, la période 2019-2024 a connu une croissance de la popularité du genre, portée par l'essor des plateformes de distribution comme Steam et les boutiques d'applications mobiles. Sur Steam, 17 446 jeux du genre sont recensés en Suisse\footnote{Nombre relevé directement sur Steam en Suisse au 29 avril 2026 à 19h00.}, le genre bénéficie d'une présence importante, ce qui confirme l'existence d'un marché actif. Selon un rapport de Verified Market Research, le marché mondial des \gls{vn} était évalué à 139 millions de dollars en 2023 et devrait atteindre 620 millions de dollars d'ici 2031, soit un taux de croissance annuel composé de 8.5\% sur la période 2024-2031. \parencite{noauthor_visual_nodate}
+
+L'ampleur du genre se reflète également dans le recensement opéré par VNDB, base de données communautaire dédiée aux \gls{vn}. La plateforme référence à ce jour 64 577 \gls{vn}\footnote{Nombre relevé directement sur vndb.org le 13 juillet 2026 à 01h20.}, couvrant aussi bien des productions commerciales que des œuvres gratuites ou amatrices, sur lesquelles 52 804 professionnels (scénaristes, réalisateurs, compositeurs, entre autres) ont été crédités\footnote{Nombre relevé directement sur vndb.org le 13 juillet 2026 à 01h20.}. VNDB rassemble par ailleurs une communauté de plus de 632 000 utilisateurs inscrits\footnote{Calculé à partir de la pagination de la liste des utilisateurs du site (6 327 pages de 100 utilisateurs et 21 utilisateurs sur la dernière page), relevé le 13 juillet 2026 à 01h20.}. \parencite{vndb_visual_nodate}
+
+
+
+\subsection{Moteur de Visual Novels existants}
+\label{sec:moteur_vn_existant}
+
+Les moteurs de jeux vidéo sont des outils logiciels destinés à faciliter la création de jeux, en prenant en charge les aspects techniques récurrents tels que l'affichage, la gestion des ressources ou encore la logique d'interaction. Dans le domaine des \gls{vn}, plusieurs outils existent, chacun reposant sur une approche différente de la narration interactive.
+
+
+
+\subsubsection{Ren’Py}
+
+Dans le domaine des \gls{vn}, plusieurs moteurs existent. Ren’Py est un moteur de \gls{vn} utilisé par des milliers de créateurs à travers le monde, permettant de raconter des histoires interactives combinant texte, images et sons, aussi bien sur ordinateur que sur mobile. À ce jour, Ren’Py a été utilisé pour créer plus de 8 000 \gls{vn}, jeux et autres \oe{}uvres interactives. \parencite{noauthor_renpy_nodate}
+
+Ren’Py propose notamment la gestion des narrations à embranchements, un système de sauvegardes, le retour en arrière dans l'histoire, des transitions de scènes variées, la lecture de vidéos, et une personnalisation complète de l'interface via son langage dédié, \textit{Screen Language}. Les scripts Ren’Py utilisent une \gls{syntaxe} proche du format d'un scénario, tout en permettant l'inclusion de blocs Python pour les utilisateurs souhaitant ajouter des fonctionnalités avancées. \parencite{noauthor_renpy_nodate}
+
+\clearpage
+
+Kretzschmar et Raffel estiment que la popularité de Ren’Py s'explique par sa gratuité, sa nature \glsit{opensource} et l'étendue de sa documentation, qui permet à quiconque d'en apprendre les subtilités. \parencite{kretzschmar_history_2023}
+
+Toutefois, Ren’Py présente plusieurs limites dans le cadre de ce projet. Bien que le moteur dispose d'une option d'export web reposant sur \gls{webassembly}, cette fonctionnalité implique une étape de compilation via l'interface du logiciel, puis la mise en ligne manuelle des fichiers générés sur un hébergeur compatible. De plus, la documentation officielle du moteur signale des restrictions importantes liées à cet export: absence de support du \textit{multi-threading}\footnote{\textbf{Multi-threading}: capacité d'un programme à exécuter plusieurs suites d'instructions en parallèle, sur des cœurs de processeur distincts. \parencite{noauthor_javascript_2026}}, impossibilité d'effectuer des requêtes réseau depuis le navigateur, et des contraintes de taille de fichiers imposées par les hébergeurs. \parencite{noauthor_renpy_nodate}
+
+
+
+\subsubsection{Twine}
+
+Twine est un outil libre et gratuit destiné à la création d'histoires interactives non linéaires sous une forme hypertextuelle: l'auteur relie entre eux des fragments de texte, appelés passages, au moyen de liens, sans qu'une connaissance de la programmation soit nécessaire pour cette structure de base. \parencite{klimas_introduction_nodate}
+
+Cette approche diffère de celle des moteurs de \gls{vn} présentés ci-dessus. Là où Ren’Py ou le moteur développé dans ce projet reposent sur un fichier de script ou de \gls{schema} décrivant linéairement des scènes, des personnages et des dialogues, Twine organise le récit comme un graphe de passages reliés entre eux, une structure plus proche de la fiction interactive textuelle que du \gls{vn} au sens strict, lequel suppose une mise en scène visuelle (fonds, \glspl{sprite}, boîte de dialogue). Pour dépasser le simple lien hypertexte, par exemple pour gérer des variables ou une logique conditionnelle, l'auteur doit recourir au langage de macros propre au format de récit choisi, ce qui représente un palier d'apprentissage supplémentaire par rapport à la simple création de liens. \parencite{klimas_introduction_nodate}
+
+Twine constitue ainsi un point de comparaison pertinent pour ce projet: comme \nsit, l'outil s'exécute dans le navigateur et permet de publier une histoire sous la forme d'un fichier autonome, sans étape de compilation imposée à l'auteur. Il s'en distingue toutefois par son modèle de structuration du récit, fondé sur le lien hypertexte plutôt que sur un \gls{schema} de données déclaratif, et par l'absence d'une mise en scène visuelle intégrée comparable à celle d'un \gls{vn}.
+
+\clearpage
+
+
+\subsection{Approches no-code/low-code}
+
+Les plateformes \textit{\glsdisp{nocode}{no-code}} permettent de créer des applications sans aucune connaissance en programmation, via des outils visuels, des modèles prédéfinis et des blocs de logique prêts à l'emploi. Les outils \textit{\glsdisp{nocode}{low-code}}, en revanche, autorisent l'ajout de code pour offrir davantage de contrôle, tout en restant accessibles aux non-développeurs.
+
+Concrètement, les plateformes \textit{\glsdisp{nocode}{no-code}} s'appuient sur des interfaces de glisser-déposer, des ressources préfabriquées et du scripting visuel. Peuvent être cités \textit{GDevelop}, \textit{Buildbox} et \textit{Construct} comme exemples représentatifs. Les outils \textit{\glsdisp{nocode}{low-code}}, tels que \textit{Unity's Bolt}, \textit{Unreal Engine's Blueprints} ou \textit{GameMaker Studio}, offrent quant à eux des modèles et des options de scripting simplifiées, avec une plus grande flexibilité. \parencite{labs_rise_2024}
+
+Ces approches présentent un intérêt croissant dans l'industrie du jeu vidéo indépendant. La faiblesse des coûts de production et l'accessibilité des outils de développement ont permis à de nombreux développeurs indépendants d'entrer sur le marché, entraînant une augmentation du nombre de titres diversifiés et innovants. \parencite{noauthor_visual_nodate}
+
+Cependant, ces outils restent majoritairement liés à des interfaces graphiques et à des environnements de bureau. L'écriture d'une histoire directement sous forme de texte structuré, sans passer par une interface visuelle, reste une approche peu explorée dans l'écosystème actuel.
+
+
+
+\subsection{Formats de description de données: comparaison et choix}
+
+Pour répondre à l'objectif d'une création entièrement textuelle, le choix du format de données est déterminant. Plusieurs formats textuels sont aujourd'hui utilisés pour structurer des données lisibles par l'humain et interprétables par une machine.
+
+
+\subsubsection{YAML}
+
+\gls{yaml} est un format fondé sur l'indentation, réputé pour sa lisibilité. Toutefois, cette lisibilité a un coût: la \gls{syntaxe} est sensible aux espaces et aux caractères spéciaux, ce qui peut engendrer des erreurs silencieuses difficiles à diagnostiquer pour un utilisateur non-développeur. De plus, les \glspl{parseur} \gls{yaml} natifs ne sont pas intégrés dans les navigateurs web, ce qui imposerait l'ajout d'une dépendance externe au projet. \parencite{noauthor_-_nodate}
+
+\clearpage
+
+
+\subsubsection{TOML}
+
+\gls{toml} est un format conçu pour les fichiers de configuration, clair et explicite dans sa \gls{syntaxe}. Il est cependant moins adapté à la représentation de structures hiérarchiques profondes et de tableaux imbriqués, caractéristiques d'un scénario avec embranchements. \parencite{noauthor_toml_nodate}
+
+
+\subsubsection{Ink}
+
+Ink, développé par Inkle Studios, est un langage de scripting narratif spécifiquement conçu pour la fiction interactive. Sa \gls{syntaxe} est expressive et proche du langage naturel, ce qui le rend attrayant pour les auteurs. Cependant, il requiert un moteur d'exécution dédié (le \glsit{runtime} Inkle), ce qui ajoute une dépendance externe, et sa structure reste un langage de programmation à part entière, dont l'apprentissage dépasse le cadre d'un simple format de données. \parencite{noauthor_ink_nodate}
+
+
+\subsubsection{JSON}
+
+\gls{json} est un format de fichier et d'échange de données ouvert, qui utilise du texte lisible par l'humain pour stocker et transmettre des objets de données sous forme de paires clé-valeur et de tableaux. Bien qu'il soit dérivé de \gls{js}, \gls{json} est indépendant de tout langage de programmation: la plupart des langages modernes intègrent des outils natifs pour générer et analyser des données au format \gls{json}. \parencite{noauthor_what_nodate}
+
+Dans le cadre de ce projet, \gls{json} présente plusieurs avantages. Sa \gls{syntaxe} à base de clés et valeurs est intuitive, lisible par n'importe quel éditeur de texte et ne nécessite aucun outil spécialisé pour être rédigée. Il constitue ainsi un choix naturel pour permettre à un auteur, même sans compétences techniques avancées, de décrire une histoire de manière structurée. En outre, \gls{json} est nativement supporté par \gls{js} et est donc directement interprétable dans un navigateur sans aucune dépendance supplémentaire, contrairement à \gls{yaml} ou Ink.
+
+Un risque inhérent à \gls{json} réside dans sa sensibilité aux erreurs de \gls{syntaxe}: une virgule manquante ou un guillemet non fermé rend le fichier invalide. Ce risque est atténué dans ce projet par l'utilisation de la \gls{librairie} \gls{zod}, ce qui permet de valider à l'exécution non seulement la \gls{syntaxe} du fichier, mais aussi la conformité de sa structure au \gls{schema} attendu par le moteur, avec des messages d'erreur explicites.

@@ -1,0 +1,218 @@
+% =========================================
+% === Italicised call for anglicisms ===
+% Wraps \gls / \glspl in \textit for entries
+% that are English common-noun anglicisms
+% (not proper nouns/brand names, not French
+% translations, not acronyms).
+% =========================================
+\newcommand{\glsit}[1]{\textit{\gls{#1}}}
+\newcommand{\glsplit}[1]{\textit{\glspl{#1}}}
+
+% ==========================
+% ======== Acronyms ========
+% ==========================
+
+\newacronym[description={}]{vn}{VN}{Visual Novel}
+%\newacronym[plural=vn,firstplural={Visual Novels} (VN)]{vn}{VN}{Visual Novel}
+%\newacronym[description={}]{ia}{I.A.}{Intelligence Artificielle}
+\newacronym[description={}]{json}{JSON}{JavaScript Object Notation}
+\newacronym[description={}]{yaml}{YAML}{YAML Ain't Markup Language}
+\newacronym[description={}]{toml}{TOML}{Tom's Obvious, Minimal Language}
+\newacronym[description={}]{html}{HTML}{HyperText Markup Language}
+\newacronym[description={}]{dom}{DOM}{Document Object Model (\textit{Modèle Objet de Document})}
+\newacronym[description={}]{css}{CSS}{Cascading Style Sheets (\textit{Feuilles de Style en Cascade})}
+
+
+
+% ============================
+% ======== Glossaries ========
+% ============================
+
+\newglossaryentry{opensource}{
+    name={open source},
+    description={Modèle de développement dans lequel le code source est public et peut être consulté, modifié et redistribué par tous, selon les conditions de sa licence}
+}
+
+\newglossaryentry{js}{
+    name={JavaScript},
+    description={Langage de programmation exécuté nativement dans les
+navigateurs web, utilisé pour rendre les pages interactives et dynamiques.
+Il constitue la base technique de ce projet: \gls{reactjs}, la \gls{librairie}
+utilisée pour le moteur, est écrite en JavaScript, et le format \acrshort{json} est
+directement interprétable par ce langage sans dépendance externe}
+}
+
+\newglossaryentry{ts}{
+    name={TypeScript},
+    description={Surcouche typée de \gls{js}, développée par Microsoft, qui ajoute un système de types statiques au langage. Les types permettent de détecter à la compilation des erreurs qui ne seraient pas visibles à l'exécution en \gls{js} pur. TypeScript est compilé vers \gls{js} standard avant d'être exécuté dans le navigateur \parencite{noauthor_starting_nodate}}
+}
+
+\newglossaryentry{reactjs}{
+    name={React.js},
+    description={Bibliothèque \gls{js} développée par Meta, utilisée pour construire des interfaces web interactives sous forme de composants réutilisables. Ce projet repose sur React.js pour le rendu du moteur de \acrlong{vn} dans le navigateur}
+}
+
+\newglossaryentry{frontend}{
+    name={frontend},
+    description={Partie d'une application web exécutée directement dans le navigateur de l'utilisateur, responsable de l'affichage et des interactions. S'oppose au \glsit{backend}, qui désigne la partie serveur}
+}
+
+\newglossaryentry{syntaxe}{
+    name={syntaxe},
+    description={Ensemble des règles formelles qu'un fichier ou un script doit respecter pour être correctement interprété par un programme. Dans ce projet, ce terme désigne notamment les règles structurelles du format \acrshort{json} utilisé comme source de contenu du moteur}
+}
+
+\newglossaryentry{parseur}{
+    name={parseur},
+    description={Programme ou composant logiciel chargé de lire un fichier texte et d'en interpréter la structure selon des règles définies. Dans ce projet, le parseur analyse le fichier \acrshort{json} du scénario et vérifie qu'il est conforme au \gls{schema} attendu avant de le transmettre au moteur}
+}
+
+\newglossaryentry{schema}{
+    name={schéma},
+    description={Au sens informatique, description formelle de la structure attendue d'un fichier de données: quels champs sont obligatoires, quels types de valeurs sont acceptés, et comment les éléments sont organisés. Dans ce projet, le schéma \acrshort{json} définit la structure que doit respecter tout fichier de scénario pour être reconnu et exécuté par le moteur}
+}
+
+\newglossaryentry{librairie}{
+    name={librairie},
+    description={Dans le domaine du développement logiciel, ensemble de composants ou de fonctions réutilisables qu'un développeur peut intégrer dans son propre projet. À ne pas confondre avec son sens courant: il ne s'agit pas d'un lieu physique, mais d'un module logiciel distribuable}
+}
+
+\newglossaryentry{nocode}{
+    name={no-code/low-code},
+    description={Approches de développement logiciel visant à réduire ou 
+    supprimer la nécessité d'écrire du code. Les outils no-code reposent 
+    entièrement sur des interfaces visuelles, tandis que les outils low-code 
+    permettent d'y adjoindre du code pour des besoins spécifiques. Ces 
+    approches visent à rendre la création d'applications accessible à des 
+    utilisateurs sans formation technique}
+}
+
+\newglossaryentry{webassembly}{
+    name={WebAssembly},
+    description={Format d'instructions binaires permettant d'exécuter dans un navigateur web du code compilé depuis d'autres langages que \gls{js}, avec des performances proches du natif}
+}
+
+\newglossaryentry{backend}{
+    name={backend},
+    description={Partie serveur d'une application web, invisible à l'utilisateur final, qui gère la logique métier, le stockage des données et les traitements nécessitant un environnement sécurisé}
+}
+
+\newglossaryentry{npm}{
+    name={npm},
+    description={Gestionnaire de paquets pour \gls{js}, installé avec Node.js. Il permet d'installer, de mettre à jour et de publier des \glspl{librairie} réutilisables (appelées \glsplit{package}) dans un projet \gls{js} ou \gls{ts}. La commande \texttt{npm install} télécharge les dépendances d'un projet, et \texttt{npm run build} exécute un script de compilation défini dans le fichier \texttt{package.json}}
+}
+
+\newglossaryentry{package}{
+    name={package},
+    description={Dans le domaine du développement \gls{js}, module logiciel distribué via \gls{npm}, installable dans un projet par une commande. Un package peut être une \gls{librairie} (comme \gls{reactjs} ou \gls{zod}), un outil de \glsit{build} (comme \gls{vite}), ou tout autre ensemble de fonctionnalités réutilisables. À ne pas confondre avec son sens courant de colis ou paquet physique}
+}
+
+\newglossaryentry{webworker}{
+    name={Web Worker},
+    description={Mécanisme natif des navigateurs web permettant d'exécuter du code \gls{js} dans un fil d'exécution secondaire, séparé du fil principal gérant l'interface utilisateur. Cela permet de déléguer des traitements coûteux en calcul sans bloquer l'affichage ni les interactions de l'utilisateur. Les Web Workers communiquent avec le fil principal par échange de messages, sans accès direct au \acrshort{dom} \parencite{noauthor_utilisation_2025}}
+}
+
+\newglossaryentry{plugin}{
+    name={plugin},
+    description={Module logiciel externe venant s'intégrer à un outil existant pour en étendre les fonctionnalités sans modifier son code source}
+}
+
+\newglossaryentry{override}{
+    name={surcharge},
+    description={(\textit{override}) En développement logiciel, mécanisme permettant de remplacer localement une valeur ou un comportement défini globalement, sans modifier la définition globale}
+}
+
+\newglossaryentry{tokenisation}{
+    name={tokenisation},
+    description={Processus de découpage d'une chaîne de texte en unités élémentaires appelées \textit{tokens}}
+}
+
+\newglossaryentry{markdown}{
+    name={Markdown},
+    description={Langage de balisage léger créé par John Gruber en 2004, conçu pour être lisible sous forme brute tout en pouvant être converti en \acrshort{html} \parencite{noauthor_daring_nodate}}
+}
+
+\newglossaryentry{framework}{
+    name={framework},
+    description={Cadre de développement logiciel fournissant une structure imposée et des outils intégrés pour la construction d'application. À distinguer d'une \gls{librairie} : un framework dicte l'architecture du projet, tandis qu'une \gls{librairie} s'intègre dans une architecture existante au choix du développeur}
+}
+
+\newglossaryentry{rendu}{
+    name={rendu},
+    description={(\textit{render}) En développement d'interfaces web, processus par lequel le navigateur calcule et met à jour l'affichage d'un composant en réponse à un changement d'état ou de données. Dans le contexte de \gls{reactjs}, un rendu désigne spécifiquement l'exécution de la fonction d'un composant et le recalcul de son arbre \acrshort{html} virtuel. Un rendu inutile survient lorsqu'un composant est recalculé sans que ses données aient changé}
+}
+
+\newglossaryentry{zod}{
+    name={Zod},
+    description={\Gls{librairie} de validation de \gls{schema} et d'inférence de types pour \gls{ts}, développé par Colin McDonnell \parencite{noauthor_zod_nodate}. Elle permet de définir la structure attendue d'un objet et de valider des données à l'exécution, en produisant des messages d'erreur précis en cas de non-conformité}
+}
+
+\newglossaryentry{hook}{
+    name={hook},
+    description={Dans \gls{reactjs}, fonction spéciale dont le nom commence par \texttt{use}, permettant d'accéder à des fonctionnalités du cycle de vie et de l'état d'un composant depuis une fonction \gls{js} ordinaire \parencite{noauthor_reference_nodate}}
+}
+
+\newglossaryentry{git}{
+    name={Git},
+    description={Système de gestion de versions distribué créé par Linus Torvalds en 2005 \parencite{noauthor_git_nodate}, permettant de suivre l'historique des modifications d'un projet, de travailler sur des branches parallèles et de collaborer à plusieurs sur un même code source}
+}
+
+\newglossaryentry{moscow}{
+    name={MoSCoW},
+    description={Méthode de priorisation des exigences issue de la gestion de projet agile. L'acronyme désigne quatre niveaux de priorité: \textit{Must have} (indispensable), \textit{Should have} (important mais non bloquant), \textit{Could have} (souhaitable si le temps le permet) et \textit{Won't have} (hors périmètre pour cette itération) \parencite{clegg_case_1994}}
+}
+
+\newglossaryentry{pdca}{
+    name={PDCA},
+    description={Cycle d'amélioration continue en quatre phases: \textit{Plan} (planification), \textit{Do} (mise en \oe{}uvre), \textit{Check} (évaluation) et \textit{Act} (ajustement). Formalisé par W. Edwards Deming \parencite{deming_out_1986}}
+}
+
+\newglossaryentry{vite}{
+    name={Vite},
+    description={Outil de \glsit{build} et serveur de développement \glsit{frontend} développé par Evan You, conçu pour offrir un rechargement à chaud rapide et une compilation optimisée pour les projets \gls{js} modernes \parencite{noauthor_vite_nodate}}
+}
+
+\newglossaryentry{poc}{
+    name={proof of concept},
+    description={Démonstration ou prototype fonctionnel visant à vérifier la faisabilité technique d'une idée ou d'une approche, sans nécessairement couvrir l'ensemble des cas d'usage ni atteindre un niveau de finition production}
+}
+
+\newglossaryentry{snaphtml}{
+    name={snapshot HTML},
+    description={Dans le contexte du composant \texttt{Typewriter}, désigne une chaîne de caractères représentant l'état complet du \gls{rendu} \acrshort{html} à un instant donné de l'animation machine à écrire. Chaque snapshot correspond à un nombre précis de caractères visibles affichés, avec les balises \acrshort{html} ouvertes et fermées correctement, permettant un affichage en O(1) par tick d'animation (Auteur 2026)}
+}
+
+\newglossaryentry{sprite}{
+    name={sprite},
+    description={Image ou illustration représentant un personnage ou un élément graphique, affichée par-dessus le décor d'une scène et pouvant être positionnée ou animée indépendamment de celui-ci. Terme issu du développement de jeux vidéo en deux dimensions}
+}
+
+\newglossaryentry{memoisation}{
+    name={mémoïsation},
+    description={Technique d'optimisation consistant à mettre en cache le résultat d'un calcul ou d'un appel de fonction coûteux, afin de le réutiliser lors d'appels ultérieurs avec les mêmes paramètres plutôt que de le recalculer. À ne pas confondre avec la mémorisation au sens cognitif: il s'agit ici d'un terme technique adapté de l'anglais \textit{memoization}, désignant ce mécanisme de cache}
+}
+
+\newglossaryentry{runtime}{
+    name={runtime},
+    description={Environnement d'exécution d'un programme, par opposition à sa compilation. Désigne aussi, par extension, le composant logiciel chargé d'interpréter et d'exécuter un contenu à ce moment-là, par exemple le moteur qui interprète un fichier de scénario dans le navigateur}
+}
+
+\newglossaryentry{placeholder}{
+    name={placeholder},
+    description={Texte ou valeur temporaire affiché dans un champ de saisie vide, servant d'indication à l'utilisateur sur le contenu attendu, et disparaissant dès que celui-ci commence à saisir une valeur}
+}
+
+\newglossaryentry{build}{
+    name={build},
+    description={Processus de compilation et d'assemblage du code source d'un projet en fichiers optimisés, prêts à être déployés. Dans ce projet, cette étape est exécutée par la commande \texttt{npm run build}}
+}
+
+\newglossaryentry{negativetesting}{
+    name={negative testing},
+    description={(\textit{unhappy path testing}) Approche de test visant à vérifier le comportement d'un programme face à des entrées inattendues, invalides ou erronées, par opposition au \textit{positive testing}, qui couvre le comportement attendu en conditions normales. Hora définit les tests négatifs comme ceux qui vérifient «l'exécution anormale, comme les cas exceptionnels» \parencite{hora_test_2024}}
+}
+
+\newglossaryentry{reactprofiler}{
+    name={React DevTools Profiler},
+    description={Extension de navigateur développée par Meta Open Source permettant d'enregistrer et d'analyser les performances de rendu d'une application \gls{reactjs}, notamment la durée et la fréquence des cycles de \gls{rendu} par composant \parencite{noauthor_react_nodate}}
+}

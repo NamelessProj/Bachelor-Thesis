@@ -1,0 +1,236 @@
+\documentclass[12pt,a4paper]{article}
+
+% Paragraphs: single line spacing, light separation between paragraphs
+\setlength{\parindent}{15pt}
+\setlength{\parskip}{0.4\baselineskip}
+
+% Line spacing per norms SAE Geneve: 1.5 for body text (footnotes stay single-spaced by default with setspace)
+\usepackage{setspace}
+\onehalfspacing
+
+% Language setting
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% Use Times-like font (recommended for academic documents)
+\usepackage{newtxtext,newtxmath}
+
+% For figures and tables
+\usepackage{graphicx}
+\graphicspath{{img/}}
+\usepackage{microtype}
+\usepackage{array}
+
+% hyperref must be loaded before glossaries for \gls links to work correctly
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+% Glossary
+\usepackage[toc, acronym]{glossaries}
+\setacronymstyle{long-short-desc}
+\makeglossaries
+\input{glossary}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+% (graphicx already loaded)
+\usepackage{booktabs}
+\usepackage[]{mdframed}
+\usepackage{datetime2}
+\usepackage{titlesec}
+\usepackage{subcaption}
+\usepackage{minted}
+\usepackage{tablefootnote}
+\usepackage{pdfpages}
+
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, fit, backgrounds}
+\usepackage{xcolor}
+
+
+% ----------------------------------------------------------
+
+% Couleurs
+\definecolor{clrInput}   {HTML}{D6EAF8}
+\definecolor{clrProcess} {HTML}{FEF9E7}
+\definecolor{clrToken}   {HTML}{D5F5E3}
+\definecolor{clrOutput}  {HTML}{FADBD8}
+\definecolor{clrBorder}  {HTML}{2C3E50}
+\definecolor{clrArrow}   {HTML}{1A252F}
+\definecolor{clrNote}    {HTML}{7F8C8D}
+
+\definecolor{clrAuteur} {HTML}{D6EAF8}
+\definecolor{clrBuild}  {HTML}{FEF9E7}
+\definecolor{clrCloud}  {HTML}{D5F5E3}
+\definecolor{clrPlayer} {HTML}{FADBD8}
+\definecolor{clrAlt}    {HTML}{EBE2F5}
+\definecolor{clrBorder} {HTML}{2C3E50}
+\definecolor{clrArrow}  {HTML}{1A252F}
+\definecolor{clrNote}   {HTML}{7F8C8D}
+
+% ----------------------------------------------------------
+
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+
+\usepackage[style=ext-authoryear, backend=biber]{biblatex}
+\addbibresource{references.bib} % note the .bib is required
+
+% Page numbering position: bottom right instead of default bottom center
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[R]{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+
+% ----------------------------------------------------------
+
+\newcommand{\ns}{NamelessStory}
+\newcommand{\nsit}{\textit{\ns}}
+\newcommand{\nsits}{\nsit\space}
+\newcommand{\nsrepo}{\url{https://github.com/NamelessProj/NamelessStory}}
+
+% ----------------------------------------------------------
+
+
+% ----------------------------------------------------------
+
+\renewcommand{\listingscaption}{Extrait de code}
+\renewcommand{\listoflistingscaption}{Liste des extraits de code}
+
+% ----------------------------------------------------------
+
+
+% ----------------------------------------------------------
+
+\titleclass{\subsubsubsection}{straight}[\subsection]
+
+\newcounter{subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection.\arabic{subsubsubsection}}
+
+\titleformat{\subsubsubsection}
+  {\normalfont\normalsize\bfseries}{\thesubsubsubsection}{1em}{}
+\titlespacing*{\subsubsubsection}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\makeatletter
+\def\toclevel@subsubsubsection{4}
+\def\l@subsubsubsection{\@dottedtocline{4}{7em}{4em}}
+\makeatother
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
+% ----------------------------------------------------------
+
+
+\DTMsetdatestyle{ddmmyyyy}
+
+\title{Mémoire de Bachelor - Da Silva Pinto Kevin}
+\author{Da Silva Pinto Kevin}
+
+\begin{document}
+
+
+
+% ----------------------------------------------------------
+% Page de garde
+
+\pagenumbering{gobble}
+\includepdf[pages=1-2]{Page_Garde_MemoireSAE.pdf}
+\clearpage
+\pagenumbering{roman}
+
+% ----------------------------------------------------------
+
+
+
+\include{chapters/resume}
+\clearpage
+
+\include{chapters/preface}
+\clearpage
+
+\include{chapters/remerciements}
+\clearpage
+
+% Table des matières ====
+\begin{singlespace}
+\addcontentsline{toc}{section}{Table des matières}
+\tableofcontents
+\end{singlespace}
+\clearpage
+% =======================
+
+% Lists =================
+\begin{singlespace}
+\addcontentsline{toc}{section}{Table des figures}
+\listoffigures
+
+\addcontentsline{toc}{section}{Liste des tableaux}
+\listoftables
+
+\clearpage
+
+\addcontentsline{toc}{section}{Liste des extraits de code}
+\listoflistings
+\end{singlespace}
+% =======================
+
+% Glossaire =============
+\printglossaries
+\clearpage
+% =======================
+
+% Note liminaire =========
+\include{chapters/note_terminologie}
+\clearpage
+% =======================
+
+\pagenumbering{arabic}
+
+% ==========================
+% ======== CHAPTERS ========
+% ==========================
+
+
+
+\include{chapters/_introduction}
+
+\include{chapters/_etatDeLArt}
+
+% ================
+% Autres chapitres
+% ================
+
+\include{chapters/_methodologie}
+
+\include{chapters/_mediaProject}
+
+\include{chapters/_resultats}
+
+\include{chapters/_conclusion}
+
+
+
+% ==========================
+% ==========================
+% ==========================
+
+
+
+\clearpage
+
+\include{chapters/bibliographie}
+
+\end{document}

@@ -1,0 +1,45 @@
+\section{Introduction}
+
+Ce chapitre pose le cadre du projet et explique pourquoi j’ai choisi de travailler sur un moteur de \gls{vn} web piloté par un script déclaratif. Il présente le contexte, la problématique, les objectifs et la méthode retenue, afin de préciser ce que ce mémoire cherche réellement à démontrer.
+
+\subsection{Contexte}
+Le genre du \gls{vn} combine narration, images et sons pour proposer des expériences interactives centrées sur le récit. Ce qui m’a intéressé dans ce format, c’est qu’il met le texte au centre, tout en laissant de la place à la mise en scène et à l’interactivité. En pratique, les moteurs existants offrent souvent des fonctionnalités très complètes, mais ils imposent aussi des étapes de compilation, des dépendances externes ou des chaînes de déploiement qui compliquent la tâche d’un auteur non-développeur. J’ai donc cherché une alternative plus directe: un moteur de \gls{vn} destiné au web, capable d’interpréter un fichier déclaratif sans installation ni compilation côté auteur.
+
+\subsection{Problématique}
+La question centrale est la suivante : dans quelle mesure une architecture de moteur de \acrlong{vn} web, basée sur un format de script déclaratif, permet-elle à des auteurs non-développeurs de créer et de déployer du contenu interactif ? Derrière cette question, il y a un point très concret: est-ce qu’un auteur peut se concentrer sur son histoire, tout en utilisant un format suffisamment simple pour rester lisible, exploitable et publiable directement dans un navigateur ?
+
+\clearpage
+
+\subsection{Objectifs}
+Les objectifs retenus pour ce projet sont expliqués dans le tableau \ref{tab:objectifs_moscow_intro} en utilisant le système de priorisation \glsit{moscow}.
+
+\begin{table}[H]
+    \centering
+    \caption{Objectifs du projet (priorisation MoSCoW)}
+    \renewcommand{\arraystretch}{1.4}
+    \begin{tabular}{p{1.8cm} p{11.5cm}}
+        \hline
+        \textbf{Priorité} & \textbf{Objectif} \\
+        \hline
+        Must & Concevoir et implémenter un moteur de \gls{vn} web capable d’interpréter un fichier \gls{json} décrivant une histoire interactive et de la rendre dans un navigateur, sans étape de compilation ni installation côté auteur. \\
+        \addlinespace
+        Should & Fournir une validation de \gls{schema} claire et des messages d’erreur compréhensibles pour un auteur non-développeur, tout en documentant un format de script capable de gérer les embranchements narratifs et les ressources multimédias. \\
+        \addlinespace
+        Can & Ajouter des outils d’aide à la rédaction et quelques fonctions complémentaires légères, comme la sauvegarde locale ou certaines variables de scène, si le temps disponible le permet. \\
+        \hline
+    \end{tabular}
+    \label{tab:objectifs_moscow_intro}
+\end{table}
+
+\subsection{Positionnement et contraintes}
+Je privilégie les technologies web natives, en particulier \textit{\gls{reactjs}}, ainsi que \textit{\gls{ts}}, qui se compile en \gls{js} et permet donc une exécution directement dans le navigateur sans dépendance supplémentaire côté client. Ce choix permet une mise en ligne simple et une exécution native dans le navigateur. Le format retenu est le \gls{json}, justement parce qu’il reste lisible dans n’importe quel éditeur de texte et qu’il s’intègre naturellement à l’écosystème web. En contrepartie, ce choix impose une contrainte propre au format: une \gls{syntaxe} fragile, qui nécessite une validation à l’exécution pour limiter les erreurs de saisie. L’absence de \glsit{backend} dans le périmètre relève, elle, d’un choix délibéré et non d’une conséquence du format retenu: elle répond à une logique de sécurité, puisqu’aucune donnée n’est stockée ni transmise à un serveur, ce qui réduit la surface d’attaque du moteur et supprime les risques liés à la gestion de données côté serveur.
+
+\subsection{Groupe cible}
+Le moteur s’adresse d’abord aux auteurs de récits interactifs sans compétences de développement. Il peut aussi intéresser des enseignants qui souhaitent créer un contenu simple et interactif, ainsi que des collectifs indépendants qui recherchent un mode de publication web immédiat.
+
+\subsection{Méthodologie et contributions}
+J’adopte une méthode itérative fondée sur le cycle \glsit{pdca}: définir une première base, la développer, vérifier ce qui fonctionne réellement, puis ajuster la suite du travail en fonction des résultats observés. Les contributions attendues sont triples: un \gls{schema} de script déclaratif documenté pour les \gls{vn}, un moteur web capable d’interpréter ce \gls{schema} sans compilation, et une évaluation pratique de la faisabilité pour des auteurs non-développeurs.
+
+\subsection{Plan du mémoire}
+Le chapitre \ref{chap:etatDeLart} présente l’état de l’art, en particulier les moteurs existants, les approches \gls{nocode} et les formats de données retenus ou écartés. Le chapitre \ref{chap:methodologie} expose la méthode de travail. Le chapitre \ref{chap:MediaProject} décrit l’implémentation du moteur et les choix techniques effectués. Le chapitre \ref{chap:resultats} analyse les résultats obtenus. Enfin, le chapitre \ref{chap:conclusion} propose une synthèse du travail et des pistes d’évolution.
+

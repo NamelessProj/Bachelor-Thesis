@@ -1,0 +1,11 @@
+\addcontentsline{toc}{section}{Résumé}
+\section*{Résumé}
+
+Ce mémoire présente la conception et la réalisation de \nsit, un moteur de \acrlong{vn} web fondé sur un fichier \acrshort{json} déclaratif. Le projet part d’un constat personnel: les moteurs de \acrlong{vn} existants offrent souvent des fonctionnalités riches, mais imposent des étapes de compilation, des dépendances externes ou des chaînes de déploiement qui compliquent la tâche d’un auteur non-développeur souhaitant simplement raconter une histoire interactive. L’objectif du projet était donc de vérifier si une architecture plus directe, pilotée uniquement par un script déclaratif interprété dans le navigateur, pouvait permettre à ce type d’auteurs de créer et de publier du contenu interactif sans installation ni compilation côté utilisateur.
+
+Pour y parvenir, j’ai structuré le développement autour d’un cycle \glsit{pdca} en trois itérations: mise en place des bases du moteur, optimisation du \gls{rendu} et renforcement de la robustesse. Le travail a abouti à un \glsit{runtime} en \gls{ts}/\gls{reactjs}, à une validation déclarative des données via la \gls{librairie} \gls{zod}, ainsi qu’à plusieurs mécanismes dédiés à la navigation narrative, à l’affichage progressif du texte et à la gestion des choix et embranchements.
+
+Les résultats montrent qu’il est techniquement possible de décrire un récit interactif avec un format déclaratif simple et de l’exécuter directement dans un navigateur, sans \glsit{backend}. L’itération d’optimisation a réduit de 28.5\% le nombre de \glspl{rendu} nécessaires, et la validation via \gls{zod} détecte de façon fiable les erreurs de \gls{syntaxe} \acrshort{json} ainsi que les fichiers de sauvegarde corrompus. En revanche, le format \acrshort{json} reste exigeant pour un auteur non technique, ce qui confirme qu’un moteur de ce type doit idéalement être complété par un outil d’édition guidée pour être réellement accessible à des auteurs non-développeurs.
+
+\medskip
+\noindent\textbf{Mots-clés :} \textit{Visual Novel}, script déclaratif, JSON, no-code/low-code, narration interactive.

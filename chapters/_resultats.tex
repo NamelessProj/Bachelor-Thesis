@@ -1,0 +1,111 @@
+\section{Résultats}
+\label{chap:resultats}
+
+\subsection{Synthèse des résultats}
+
+Ce chapitre rassemble les résultats obtenus au cours des trois itérations de développement de \nsit. J’y présente à la fois les mesures quantitatives et les constats plus qualitatifs qui m’ont permis d’évaluer le travail réalisé: atteinte des objectifs fonctionnels, performances observées et robustesse apportée par la validation des fichiers \gls{json}.
+
+
+
+\subsubsection{Atteinte des objectifs (MoSCoW)}
+
+Le tableau \ref{tab:resultats_moscow} récapitule l'état d'avancement des objectifs définis dans le projet. Il permet de voir rapidement ce qui a été atteint, partiellement atteint ou laissé pour une version future.
+
+\begin{table}[H]
+    \centering
+    \caption{Réalisation des objectifs MoSCoW}
+    \renewcommand{\arraystretch}{1.4}
+    \begin{tabular}{p{1.6cm} p{5.5cm} p{6cm}}
+        \hline
+        \textbf{Priorité} & \textbf{Fonctionnalité} & \textbf{Statut et remarques} \\
+        \hline
+        Must & Effet "machine à écrire" (composant \texttt{Typewriter}) & Atteint. Comportement optimisé via précomputation des \glslink{snaphtml}{snapshots HTML} et calcul des délais (voir section \ref{sec:optim_react} et extrait \ref{lst:typewriter}). \\
+        \addlinespace
+        Must & Navigation entre scènes & Atteint. Composants "Scene" et "Dialogue" gèrent la progression et la clé \texttt{next} pour la navigation. \\
+        \addlinespace
+        Must & Gestion des choix et embranchements & Atteint. Options présélectionnables menant à scènes ou dialogues ciblés. \\
+        \addlinespace
+        Should & Gestion des saisies (champs) & Atteint. Support du \glsit{placeholder} dynamique et gestion basique des entrées utilisateur. \\
+        \addlinespace
+        Can & Fonctionnalités additionnelles (\glsplit{sprite}, transitions, polices) & Partiellement atteintes: \glsplit{sprite} et transitions implémentés; gestion avancée des sauvegardes et éditeur intégré non réalisés (axes futurs). \\
+        \hline
+    \end{tabular}
+    \label{tab:resultats_moscow}
+\end{table}
+
+
+
+\subsubsection{Métriques de performance}
+
+Pour mesurer l’effet de l’itération d’optimisation, j’ai utilisé le \gls{reactprofiler} sur cinq sessions identiques, avant et après les optimisations. Les mesures pertinentes sont développées dans le tableau \ref{tab:metriques_performance} sur des médianes de cinq sessions.
+
+\begin{table}[H]
+    \centering
+    \caption{Métriques de performance avant/après optimisation (médianes sur cinq sessions)}
+    \renewcommand{\arraystretch}{1.4}
+    \begin{tabular}{p{6cm} p{3cm} p{3cm}}
+        \hline
+        \textbf{Métrique} & \textbf{Avant} & \textbf{Après} \\
+        \hline
+        Nombre de \glspl{rendu} & 688 & 492 \\
+        \addlinespace
+        Durée moyenne par \gls{rendu} & 0.165 ms & 0.321 ms \\
+        \addlinespace
+        Durée maximale observée & 3.0 ms & 18.3 ms \\
+        \addlinespace
+        Durée cumulée de la session & 113.7 ms & 158.3 ms \\
+        \hline
+    \end{tabular}
+    \label{tab:metriques_performance}
+\end{table}
+
+Ces résultats (tableaux \ref{tab:profiling_before}, \ref{tab:profiling_after} et \ref{tab:metriques_performance}, figures \ref{fig:profiling_renders} et \ref{fig:profiling_maxdur}) montrent un compromis clair. L’utilisation de mécanismes de \gls{memoisation} et de précomputation réduit nettement le nombre de \glslink{rendu}{re-rendus} inutiles, une réduction de 28.5\%, mais concentre aussi une partie du coût de calcul au moment de la préparation initiale. En pratique, cela rend l’expérience plus fluide pendant la session, au prix d’un coût un peu plus élevé sur certains \glspl{rendu} isolés. Pour ce projet, ce compromis me semble cohérent avec l’objectif principal: éviter des blocages répétés du fil principal.
+
+
+
+\subsubsection{Robustesse et validation}
+
+L’intégration de la \gls{librairie} \gls{zod} a permis d’introduire une validation déclarative et sémantique des fichiers \gls{json} (\glspl{schema} \texttt{storySchema} et \texttt{saveSchema}). Les \glslink{negativetesting}{tests négatifs} ajoutés confirment que :
+
+\begin{itemize}
+    \item Les erreurs de \gls{syntaxe} \gls{json} et les champs obligatoires manquants sont détectés et remontés via des messages explicites, voir figure \ref{fig:zod_erreurs}.
+    \item Les fichiers de sauvegarde corrompus sont rejetés avant injection dans l'application.
+\end{itemize}
+
+Ces résultats répondent partiellement à la problématique: le format déclaratif (\gls{json} + \gls{schema}) rend le moteur déterministe et vérifiable, mais sans outil d’édition adapté l’auteur non-développeur reste exposé à la contrainte de \gls{syntaxe}.
+
+
+
+\subsection{Évaluation et auto-réflexion}
+
+\subsubsection{Évaluation du Media Project}
+
+Sur le plan technique, les principaux acquis ont été la portabilité, la robustesse et les gains de performance observés grâce à la \gls{memoisation} et à la précomputation. Les mesures de profiling ont montré une réduction notable du nombre de \glspl{rendu}, au prix d’un coût ponctuel plus élevé pour certains \glspl{rendu} initiaux. Ce compromis reste cohérent avec l’objectif d’éviter des blocages continus du fil principal.
+
+Les limites identifiées concernent l’accessibilité pour des auteurs non-développeurs, la lisibilité encore limitée du format \gls{json} et l’absence d’un éditeur guidé. Par ailleurs, certaines fonctionnalités avancées, comme les embranchements conditionnels complexes, un éditeur intégré ou une gestion avancée des sauvegardes, restent hors périmètre de cette version et constituent des axes de développement futurs.
+
+En réponse à la problématique de recherche, l’architecture basée sur un format déclaratif montre qu’il est techniquement possible de permettre la création de contenu interactif sans \glsit{backend}, avec une validation automatique pour prévenir les erreurs d’exécution. Toutefois, pour que des auteurs non-développeurs puissent réellement créer du contenu sans aide technique, il faut encore ajouter une couche d’outillage, par exemple un éditeur guidé ou une conversion depuis un format plus lisible.
+
+
+
+\subsubsection{Réflexion personnelle}
+
+J’ai conduit seul l’ensemble du projet: conception, développement, tests et rédaction. La méthode \glsit{pdca} m’a aidé à prioriser les fonctionnalités essentielles, mais j’ai aussi dû composer avec des contraintes personnelles et professionnelles, notamment la santé et la charge de travail, qui ont ralenti certaines étapes.
+
+L’intégration de \gls{zod} est une réussite dont je suis fier: fournir des messages d’erreur clairs a nettement amélioré la robustesse. De même, le fait d’avoir réalisé le projet en \gls{ts} m’a aidé à prévenir des erreurs et à rendre le code plus maintenable. J’ai aussi acquis des compétences nouvelles en optimisation \gls{reactjs} (\texttt{useMemo}, \texttt{React.memo}) et dans l’utilisation de \gls{webworker} pour déléguer certains traitements.
+
+Le choix du format de script (\gls{json}) s’est avéré contraignant du point de vue auteur: même s’il est pragmatique pour le développement, il reste moins adapté à des écrivains non techniques. Par manque de temps, j’ai renoncé à implémenter des embranchements conditionnels riches, qui auraient augmenté la complexité de l’implémentation.
+
+\clearpage
+
+Comme signalé au chapitre \ref{chap:methodologie}, je n’ai pas pu confronter ce travail à un avis de professionnels. Mes tentatives de contact auprès de développeurs de \gls{vn} et de développeurs web, menées depuis janvier 2026, sont restées sans réponse. L’évaluation présentée ici repose donc sur le \glsit{poc} réalisé et sur ma propre analyse, sans validation externe spécialisée, ce qui constitue une limite à garder en tête dans la lecture des résultats qui précèdent.
+
+Si je devais recommencer, j’intégrerais plus tôt un validateur de schéma (\gls{zod} ou équivalent) et je consacrerais davantage de temps à concevoir un outil d’édition guidée. La suite immédiate du projet consiste à :
+
+\begin{itemize}
+    \item réaliser un prototype d'éditeur guidé avec validation en temps réel ;
+    \item conduire des tests utilisateurs (5–8 participants) pour mesurer l'accessibilité du format ;
+    \item améliorer progressivement les embranchements narratifs et la documentation technique.
+\end{itemize}
+
+% Fin du chapitre Résultats

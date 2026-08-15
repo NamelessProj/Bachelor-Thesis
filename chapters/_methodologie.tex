@@ -1,0 +1,133 @@
+\section{Méthodologie}
+\label{chap:methodologie}
+
+\subsection{Vue d'ensemble}
+
+Je structure ce projet comme un développement itératif, plutôt que comme une réalisation linéaire. L’idée est de construire une première base fonctionnelle, puis d’ajuster progressivement le moteur en fonction des contraintes rencontrées: techniques, de format et de temps. Cette manière de faire me paraît plus adaptée à un projet de ce type, parce qu’elle permet de vérifier rapidement ce qui fonctionne réellement avant d’aller plus loin.
+
+Le processus global repose sur trois axes: un cycle de développement basé sur le modèle \glsit{pdca}, une priorisation claire des fonctionnalités dont les objectifs sont définis au chapitre \ref{sec:objMediaProject}, et une validation fonctionnelle à chaque itération. Cette structure sert de fil conducteur tout au long du projet.
+
+
+\subsection{Cycle de développement itératif (PDCA)} \label{sec:PDCA}
+
+Le modèle \glsit{pdca} (\textit{Plan}, \textit{Do}, \textit{Check}, \textit{Act}), formalisé par W. Edwards Deming dans le cadre de l'amélioration continue des processus \parencite{deming_out_1986}, constitue le cadre méthodologique de ce projet. Je retiens ce modèle parce qu’il colle bien à un travail de développement où les décisions doivent être revues au fur et à mesure. Chaque itération suit donc les quatre phases décrites dans le tableau \ref{tab:defPDCA}.
+
+\begin{table}[H]
+    \centering
+    \caption{Définition du cycle PDCA utilisée}
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{p{1.5cm} p{11cm}}
+        \hline
+        \textbf{Nom} & \textbf{Description} \\
+        \hline
+        \textbf{Plan} & Définition des fonctionnalités à implémenter pour l'itération, en référence aux objectifs établis au chapitre. \\
+        \addlinespace
+        \textbf{Do} & Implémentation des fonctionnalités planifiées. \\
+        \addlinespace
+        \textbf{Check} & Évaluation du résultat par vérification fonctionnelle manuelle et, le cas échéant, par validation automatique via le \gls{parseur} \gls{zod}. \\
+        \addlinespace
+        \textbf{Act} & Ajustement des objectifs de l'itération suivante en fonction des écarts constatés. \\
+        \hline
+    \end{tabular}
+    \label{tab:defPDCA}
+\end{table}
+
+Ce modèle est retenu pour sa capacité à intégrer les retours d’évaluation sans devoir redéfinir l’ensemble du périmètre à chaque étape.
+
+\clearpage
+
+Le développement se déroule en trois étapes successives, dont les objectifs sont résumés dans le tableau \ref{tab:objectifs_iterations} et décrits en détail au chapitre \ref{chap:MediaProject}. Je choisis de les distinguer clairement pour rendre l’évolution du projet plus lisible.
+
+\begin{table}[H]
+    \centering
+    \caption{Objectif par itération}
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{p{0.5cm} p{2.7cm} p{9.5cm}}
+        \hline
+        \textbf{N°} & \textbf{Objectif} & \textbf{Description} \\
+        \hline
+        1 & Fonctionnement du moteur & Implémentation des mécaniques fondamentales (affichage du texte, gestion des scènes, gestion des choix) et vérification du comportement attendu dans le navigateur. \\
+        \addlinespace
+        2 & Optimisation & Amélioration des performances internes, notamment par l'utilisation de \glspl{webworker} pour déléguer certains traitements hors du fil d'exécution principal, et refactorisation du code pour en augmenter la maintenabilité. \\
+        \addlinespace
+        3 & Sécurité et robustesse & Intégration de la \gls{librairie} \gls{zod} pour valider à l'exécution la conformité des fichiers \gls{json} au \gls{schema} attendu, et pour avertir l'utilisateur en cas de fichier de sauvegarde corrompu ou invalide. \\
+        \hline
+    \end{tabular}
+    \label{tab:objectifs_iterations}
+\end{table}
+
+\clearpage
+
+
+\subsection{Critères d'évaluation et validation fonctionnelle}
+
+En l’absence de tests automatisés formels, je valide chaque fonctionnalité à partir de deux approches complémentaires.
+
+
+\subsubsection{Vérification fonctionnelle manuelle}
+
+Chaque fonctionnalité implémentée est testée directement dans le navigateur, en condition réelle, à partir de fichiers \gls{json} représentatifs. Les cas de test couvrent à la fois des scénarios valides et des scénarios d'erreur intentionnellement construits (\glsit{negativetesting}): suppression de virgules ou de guillemets pour casser la \gls{syntaxe} \gls{json}, omission de champs obligatoires attendus par le moteur (comme le nom du personnage parlant), et injection de valeurs de mauvais type (par exemple, un booléen à la place d'une chaîne de caractères). Ces fichiers de tests sont disponibles dans le dépôt GitHub\footnote{\textbf{GitHub}: plateforme d'hébergement de code source et de gestion de versions basée sur \gls{git}. \parencite{noauthor_build_nodate}} du projet: \nsrepo. Le critère de validation est la conformité du comportement observé avec le comportement attendu défini lors de la phase \textit{Plan} de chaque itération.
+
+
+\subsubsection{Validation par Zod} \label{sec:zod}
+
+La \gls{librairie} \gls{zod}, intégrée lors de la troisième itération, valide à l'exécution la structure du fichier \gls{json} fourni par l'auteur. En cas d'écart par rapport au \gls{schema} défini: champ manquant, type incorrect, structure invalide, \gls{zod} retourne un message d'erreur explicite indiquant précisément la source du problème, ce qui constitue un mécanisme de détection d'erreurs déterministe.
+
+\clearpage
+
+
+\subsection{Considérations sur la sécurité et la robustesse}
+
+Deux préoccupations guident les décisions de développement au-delà de la simple fonctionnalité.
+
+
+\subsubsection{Robustesse du code}
+
+L'utilisation de \gls{ts} comme surcouche typée de \gls{js} permet de détecter à la compilation un ensemble d'erreurs de type qui seraient silencieuses en \gls{js} pur. Combiné à la validation \gls{zod} à l'exécution, ce dispositif forme une double barrière contre les états invalides du moteur. \parencite{noauthor_starting_nodate}
+
+
+\subsubsection{Sécurité du code}
+
+Le moteur opère entièrement côté client, dans le navigateur, sans serveur \glsit{backend}. Cette architecture supprime une surface d'attaque importante: il n'y a ni base de données exposée, ni gestion d'authentification, ni transmission de données utilisateur vers un serveur tiers. Le contenu narratif est statique et ne transite pas par un serveur applicatif. La validation des fichiers de sauvegarde par \gls{zod} permet par ailleurs d'empêcher l'injection de données malformées susceptibles de mettre le moteur dans un état indéterminé.
+
+
+\subsection{Objectifs du Media Project} \label{sec:objMediaProject}
+
+L'objectif principal de ce projet est d'offrir une alternative entièrement textuelle aux moteurs de \gls{vn} existants, facile à utiliser et à mettre en ligne. Contrairement aux solutions actuelles présentées au chapitre \ref{sec:moteur_vn_existant}, telles que Ren’Py, qui nécessite l'installation d'un environnement de développement dédié, ou Twine, dont la structure hypertextuelle impose l'apprentissage d'un langage de macros propre pour dépasser le simple lien, \nsits permet à tout auteur disposant de connaissances de base en \gls{json} de créer et de publier un \gls{vn} fonctionnel.
+
+En proposant une solution \glsit{opensource}, le projet laisse la possibilité aux personnes possédant des connaissances en développement de modifier et d'étendre les fonctionnalités selon leurs besoins. L'\glsit{opensource} permet également à toute personne intéressée de contribuer activement au développement du moteur.
+
+\clearpage
+
+Le tableau \ref{tab:objectifs_moscow} définit les objectifs selon la méthode de priorisation \glsit{moscow} \parencite{clegg_case_1994}.
+
+\begin{table}[H]
+    \centering
+    \caption{Objectifs du Media Project selon la priorisation MoSCoW}
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{p{2cm} p{4.5cm} p{6cm}}
+        \hline
+        \textbf{Priorité} & \textbf{Fonctionnalité} & \textbf{Description} \\
+        \hline
+        Must & Effet machine à écrire & Affichage du texte caractère après caractère, simulant une machine à écrire. \\
+        \addlinespace
+        Must & Gestion des scènes & Navigation entre scènes, permettant les changements de décor et la progression narrative. \\
+        \addlinespace
+        Must & Gestion des choix & Présentation de choix au joueur, orientant la narration vers des routes différentes. \\
+        \addlinespace
+        Should & Gestion des saisies & Stockage d'une valeur saisie par le joueur, réutilisable dans le récit via une clé. \\
+        \addlinespace
+        Can & Fonctionnalités additionnelles & Toute autre fonctionnalité envisageable selon le temps disponible (sons, images, transitions). \\
+        \hline
+    \end{tabular}
+    \label{tab:objectifs_moscow}
+\end{table}
+
+\clearpage
+
+
+\subsection{Limites méthodologiques}
+
+Cette approche présente deux limites principales. La première concerne l'absence de tests automatisés (\textit{unit tests}\footnote{\textbf{Test unitaire} (\textit{unit test}): test automatisé vérifiant le comportement d'une unité de code isolée. (\cite{beck_test-driven_2002};\cite{aniche_effective_2022})}, \textit{integration tests}\footnote{\textbf{Test d'intégration} (\textit{integration test}): test automatisé vérifiant que plusieurs unités ou composants fonctionnent correctement ensemble. \parencite{aniche_effective_2022}}). Le développement privilégie la mise en fonctionnement progressive des fonctionnalités sur la mise en place d'une suite de tests formelle. Cette absence implique que la couverture des cas limites dépend de l'exhaustivité des tests manuels réalisés et que des régressions introduites lors d'une itération pourraient passer inaperçues.
+
+La seconde limite concerne l'absence de validation par des professionnels du secteur. Depuis janvier 2026, je contacte des développeurs de \gls{vn}, dans le but de recueillir leur avis sur l'approche retenue pour faciliter le développement de \gls{vn}, ainsi que des développeurs web, dans le but de discuter de l'infrastructure mise en place pour faire fonctionner le moteur. Ces sollicitations restent, à ce jour, sans réponse. En l'absence de retour de professionnels, l'évaluation du projet repose donc uniquement sur une validation interne au moyen d'un \glsit{poc} fonctionnel, sans confrontation à un regard extérieur spécialisé. Ces deux limites seront reprises dans l'évaluation critique au chapitre \ref{chap:resultats}.
